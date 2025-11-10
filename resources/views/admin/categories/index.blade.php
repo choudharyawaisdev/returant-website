@@ -25,7 +25,7 @@
                 </div>
                 <div class="card-body p-2">
                     <div class="table-responsive">
-                        <table class="table table-hover text-nowrap">
+                        <table id="example" class="table table-hover text-nowrap">
                             <thead>
                                 <tr>
                                     <th>Sr</th>

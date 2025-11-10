@@ -51,6 +51,51 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <!-- Size/Type (Dynamic) -->
+                                <div class="col-md-6 mb-3" id="typeField" style="display:none;">
+                                    <label for="type" class="form-label">Size / Type</label>
+                                    <select class="form-control" id="type" name="type">
+                                        <!-- Options will be dynamically added by JS -->
+                                    </select>
+                                </div>
+                                <script>
+                                    const categorySelect = document.getElementById('category_id');
+                                    const typeField = document.getElementById('typeField');
+                                    const typeSelect = document.getElementById('type');
+
+                                    // Define options for each category
+                                    const categoryTypes = {
+                                        'Pizza': ['Small', 'Medium', 'Large', 'Extra Large'],
+                                        'Burger': ['Zinger', 'Beef', 'Grilled', 'Crispy'],
+                                        'Drinks': ['Regular', 'Large'],
+                                        'Fries': ['Small', 'Large'],
+                                        'Platter': ['Single', 'Double'],
+                                        'Wings': ['4 pcs', '6 pcs', '12 pcs'],
+                                        'Pasta': ['Red Sauce', 'White Sauce'],
+                                        'Sandwich': ['Club', 'Grilled', 'Cheese'],
+                                        'Rolls': ['Chicken Roll', 'Beef Roll'],
+                                        'Nuggets & Shots': ['6 pcs', '12 pcs']
+                                    };
+
+                                    categorySelect.addEventListener('change', function() {
+                                        const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+                                        const options = categoryTypes[selectedText];
+
+                                        if (options) {
+                                            typeSelect.innerHTML = '<option value="">-- Select Size/Type --</option>';
+                                            options.forEach(option => {
+                                                const opt = document.createElement('option');
+                                                opt.value = option;
+                                                opt.textContent = option;
+                                                typeSelect.appendChild(opt);
+                                            });
+                                            typeField.style.display = 'block';
+                                        } else {
+                                            typeField.style.display = 'none';
+                                            typeSelect.innerHTML = '';
+                                        }
+                                    });
+                                </script>
 
                                 <!-- Price -->
                                 <div class="col-md-6 mb-3">
