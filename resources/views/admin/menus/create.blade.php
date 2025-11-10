@@ -23,15 +23,24 @@
                         <form action="{{ route('admin.menus.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <!-- Type -->
+                                <!-- Category -->
                                 <div class="col-md-6 mb-3">
-                                    <label for="type" class="form-label">Type</label>
-                                    <input type="text" class="form-control @error('type') is-invalid @enderror"
-                                        id="type" name="type" value="{{ old('type') }}" required>
-                                    @error('type')
+                                    <label for="category_id" class="form-label">Category</label>
+                                    <select class="form-control @error('category_id') is-invalid @enderror"
+                                        name="category_id" id="category_id" required>
+                                        <option value="">-- Select Category --</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                                {{ $category->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
 
                                 <!-- Title -->
                                 <div class="col-md-6 mb-3">
