@@ -98,7 +98,7 @@
         @if ($category->menus->count())
             <section class="container my-5">
                 <h2 id="{{ Str::slug($category->name) }}" class="section-title">{{ $category->name }}</h2>
-                <div class="row g-4 justify-content-center">
+                <div class="row g-4">
                     @foreach ($category->menus as $menu)
                         <div class="col-12 col-md-6 col-lg-4">
                             <div class="card shadow-sm p-3 product-card" data-title="{{ $menu->title }}"
