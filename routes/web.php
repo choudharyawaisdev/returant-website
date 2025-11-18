@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AddUserController;
 
+use App\Http\Controllers\CartController;
 
 
 
@@ -24,8 +25,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 
+// ... other routes
+
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
 
 
+// Checkout Page
+Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
+
+// Order Submission
+Route::post('/order', [CartController::class, 'placeOrder'])->name('order.place');
+
+// Dummy Success Page (Create this view later)
+Route::get('/order/success', function () {
+    return view('checkout.success');
+})->name('order.success');
 
 
 
