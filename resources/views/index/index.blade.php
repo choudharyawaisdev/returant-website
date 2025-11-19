@@ -89,7 +89,12 @@
             left: 0;
         }
     </style>
-
+    <style>
+        /* Hide scrollbar */
+        #categoryMenu::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
     @php
         $categoryNames = [
             1 => 'Platter',
@@ -105,29 +110,33 @@
     @endphp
 
     {{-- NEW: SINGLE IMAGE SLIDER (Carousel) --}}
-    <div id="imageSlider" class="carousel slide mb-4" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {{-- Assuming a single banner image for simplicity. Add more .carousel-item for a true slider. --}}
-            <div class="carousel-item active">
-                <img src="{{ asset('assets/images/banner image.png') }}" class="d-block w-100" alt="Special Offer Banner"
-                    style="object-fit: cover; height: 300px;">
+    <div class="container my-4">
+        <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {{-- Single banner image --}}
+                <div class="carousel-item active">
+                    <img src="{{ asset('assets/images/banner image.png') }}" class="d-block mx-auto" alt="Special Offer Banner"
+                        style="object-fit: cover; height: 300px; max-width: 95%; border-radius: 15px;">
+                </div>
             </div>
         </div>
     </div>
 
-    {{-- MAIN NAVIGATION BAR (Sticky Categories) --}}
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top p-3">
-        <div class="container">
 
-            {{-- Mobile Menu Toggle --}}
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="fw-bold">MENU</span>
+    {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top py-2">
+        <div class="container position-relative">
+
+            {{-- Left Scroll Button --}}
+            <button id="scrollLeft" class="btn position-absolute start-0 top-50 translate-middle-y shadow-sm text-white"
+                style="z-index: 10; background-color: #dc3545;"> <!-- Red bg -->
+                <i class="fas fa-chevron-left"></i>
             </button>
 
-            {{-- Desktop Navigation Links --}}
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav fw-medium text-uppercase gap-3">
+            {{-- Scrollable Menu Wrapper --}}
+            <div class="overflow-hidden" style="margin: 0 50px;">
+                <ul id="categoryMenu" class="navbar-nav d-flex flex-row gap-3 text-uppercase fw-medium"
+                    style="white-space: nowrap; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none;">
                     <li class="nav-item"><a class="nav-link" href="#platter">Platter</a></li>
                     <li class="nav-item"><a class="nav-link" href="#wings">Wings</a></li>
                     <li class="nav-item"><a class="nav-link" href="#burger">Burger</a></li>
@@ -137,12 +146,16 @@
                     <li class="nav-item"><a class="nav-link" href="#nuggets-shots">Nuggets & Shots</a></li>
                     <li class="nav-item"><a class="nav-link" href="#fries">Fries</a></li>
                     <li class="nav-item"><a class="nav-link" href="#drinks">Drinks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pizza">Pizza</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#deals">Deals</a></li>
                 </ul>
             </div>
 
-            {{-- Spacer to center the menu --}}
-            <div class="d-flex align-items-center gap-2 d-none d-lg-block" style="width: 100px;">
-            </div>
+            {{-- Right Scroll Button --}}
+            <button id="scrollRight" class="btn position-absolute end-0 top-50 translate-middle-y shadow-sm text-white"
+                style="z-index: 10; background-color: #dc3545;"> <!-- Red bg -->
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
     </nav>
 
@@ -250,7 +263,8 @@
     </div>
 
     {{-- CART OFFCANVAS (Right Sidebar) --}}
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel"
+        style="border-radius: 25px 0px 0px 25px">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel"><i class="fa-solid fa-cart-arrow-down"></i> Your
                 Cart (<span id="cartCountHeader">0</span>)
@@ -273,7 +287,6 @@
             </div>
         </div>
     </div>
-
 
     {{-- JAVASCRIPT LOGIC --}}
     <script>
@@ -555,6 +568,26 @@
             });
 
             updateCartUI();
+        });
+    </script>
+
+    <script>
+        const categoryMenu = document.getElementById('categoryMenu');
+        const scrollLeftBtn = document.getElementById('scrollLeft');
+        const scrollRightBtn = document.getElementById('scrollRight');
+
+        scrollLeftBtn.addEventListener('click', () => {
+            categoryMenu.scrollBy({
+                left: -200,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+            categoryMenu.scrollBy({
+                left: 200,
+                behavior: 'smooth'
+            });
         });
     </script>
 

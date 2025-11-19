@@ -8,9 +8,23 @@ use App\Models\Menu;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::with('menus')->get();
-        return view('index.index', compact('categories'));
+        $searchQuery = $request->input('q');
+
+        $categories = Category::with(['menus' => function ($query) use ($searchQuery) {
+            if ($searchQuery) {
+                $query->where('name', 'like', '%' . $searchQuery . '%');
+            }
+        }])->get();
+
+        return view('index.index', compact('categories', 'searchQuery'));
     }
+
+    public function show($id)
+    {
+        $menu = Menu::findOrFail($id);
+        return view('menu.show', compact('menu'));
+    }
+
 }

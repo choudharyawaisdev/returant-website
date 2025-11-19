@@ -14,12 +14,8 @@ use App\Http\Controllers\CartController;
 Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
 Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/cart/add', [MenuController::class, 'add'])->name('cart.add');
-// web.php
-Route::post('/client/save-location', [App\Http\Controllers\ClientController::class, 'saveLocation'])->name('client.saveLocation');
-
-// The route to display the actual cart page before checkout.
+Route::get('/menu/search', [MenuController::class, 'search'])->name('menu.search');
 // You might show a mini-cart on the menu page, but a full page is needed.
-Route::get('/cart', [MenuController::class, 'index'])->name('cart.index');
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menus', MenuController::class);
     Route::resource('categories', CategoryController::class);
@@ -32,7 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
 Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
-
+Route::get('/cart', [MenuController::class, 'index'])->name('cart.index');
 
 // Checkout Page
 Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
