@@ -215,9 +215,7 @@
 
 
     {{-- LOCATION MODAL --}}
-    <div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
-        {{-- ... (Location Modal content remains the same) ... --}}
-    </div>
+
 
     {{-- PRODUCT MODAL (For Quantity Selection) --}}
     <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
@@ -254,8 +252,8 @@
     {{-- CART OFFCANVAS (Right Sidebar) --}}
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
         <div class="offcanvas-header border-bottom">
-            <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel">🛒 Your Cart (<span
-                    id="cartCountHeader">0</span>)
+            <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel"><i class="fa-solid fa-cart-arrow-down"></i> Your
+                Cart (<span id="cartCountHeader">0</span>)
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
@@ -541,12 +539,12 @@
                         const topBar = document.querySelector('.top-bar');
                         const mainNavbar = document.querySelector('.main-navbar');
                         const searchBar = document.querySelector(
-                        '.container-fluid.bg-light'); // NEW
+                            '.container-fluid.bg-light'); // NEW
                         const topBarHeight = topBar ? topBar.offsetHeight : 0;
                         const mainNavbarHeight = mainNavbar ? mainNavbar.offsetHeight : 0;
                         const searchBarHeight = searchBar ? searchBar.offsetHeight : 0; // NEW
                         const offset = topBarHeight + mainNavbarHeight + searchBarHeight +
-                        20; // Adjusted offset
+                            20; // Adjusted offset
 
                         window.scrollTo({
                             top: targetElement.offsetTop - offset,

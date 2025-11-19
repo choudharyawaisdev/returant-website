@@ -14,6 +14,8 @@ use App\Http\Controllers\CartController;
 Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
 Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/cart/add', [MenuController::class, 'add'])->name('cart.add');
+// web.php
+Route::post('/client/save-location', [App\Http\Controllers\ClientController::class, 'saveLocation'])->name('client.saveLocation');
 
 // The route to display the actual cart page before checkout.
 // You might show a mini-cart on the menu page, but a full page is needed.
