@@ -1,8 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Café Chinos - Menu')
-
 @section('body')
-
     <style>
         .card {
             transition: all 0.3s ease;
@@ -65,11 +63,11 @@
             font-weight: 600;
             min-width: auto;
         }
-        
+
         /* NEW: Navbar Link Hover Effect */
         .main-navbar .nav-link {
             position: relative;
-            padding-bottom: 5px; 
+            padding-bottom: 5px;
             transition: color 0.3s ease;
         }
 
@@ -80,7 +78,8 @@
             bottom: 0;
             width: 0;
             height: 3px;
-            background-color: #A9262B; /* Primary color for the line */
+            background-color: #A9262B;
+            /* Primary color for the line */
             transition: width 0.3s ease, left 0.3s ease;
         }
 
@@ -110,18 +109,19 @@
         <div class="carousel-inner">
             {{-- Assuming a single banner image for simplicity. Add more .carousel-item for a true slider. --}}
             <div class="carousel-item active">
-               p <img src="{{ asset('assets/images/banner image.png') }}" class="d-block w-100" alt="Special Offer Banner" style="object-fit: cover; height: 300px;">
+                <img src="{{ asset('assets/images/banner image.png') }}" class="d-block w-100" alt="Special Offer Banner"
+                    style="object-fit: cover; height: 300px;">
             </div>
         </div>
     </div>
 
     {{-- MAIN NAVIGATION BAR (Sticky Categories) --}}
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top">
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top p-3">
         <div class="container">
 
             {{-- Mobile Menu Toggle --}}
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
                 <span class="fw-bold">MENU</span>
             </button>
 
@@ -145,15 +145,17 @@
             </div>
         </div>
     </nav>
-    
+
     {{-- NEW: FULL-WIDTH SEARCH BAR --}}
     <div class="container-fluid bg-light py-3 border-bottom">
         <div class="container">
             <form action="{{ url('/menu/search') }}" method="GET" class="row g-2">
                 <div class="col-12">
                     <div class="input-group">
-                        <input type="search" name="q" class="form-control rounded-pill pe-5" placeholder="Search menu items..." aria-label="Search" style="height: 48px;">
-                        <span class="input-group-text bg-transparent border-0 position-absolute end-0" style="z-index: 10; top: 0; bottom: 0;">
+                        <input type="search" name="q" class="form-control rounded-pill pe-5"
+                            placeholder="Search menu items..." aria-label="Search" style="height: 48px;">
+                        <span class="input-group-text bg-transparent border-0 position-absolute end-0"
+                            style="z-index: 10; top: 0; bottom: 0;">
                             <button type="submit" class="btn btn-link p-0 text-dark"><i class="fas fa-search"></i></button>
                         </span>
                     </div>
@@ -406,8 +408,7 @@
 
             document.querySelectorAll('.product-card').forEach(card => {
                 card.addEventListener('click', (e) => {
-                    if (e.target.closest('.add-to-cart-trigger')) {
-                    }
+                    if (e.target.closest('.add-to-cart-trigger')) {}
 
                     currentMenu = {
                         id: card.dataset.id,
@@ -539,11 +540,13 @@
                     if (targetElement) {
                         const topBar = document.querySelector('.top-bar');
                         const mainNavbar = document.querySelector('.main-navbar');
-                        const searchBar = document.querySelector('.container-fluid.bg-light'); // NEW
+                        const searchBar = document.querySelector(
+                        '.container-fluid.bg-light'); // NEW
                         const topBarHeight = topBar ? topBar.offsetHeight : 0;
                         const mainNavbarHeight = mainNavbar ? mainNavbar.offsetHeight : 0;
                         const searchBarHeight = searchBar ? searchBar.offsetHeight : 0; // NEW
-                        const offset = topBarHeight + mainNavbarHeight + searchBarHeight + 20; // Adjusted offset
+                        const offset = topBarHeight + mainNavbarHeight + searchBarHeight +
+                        20; // Adjusted offset
 
                         window.scrollTo({
                             top: targetElement.offsetTop - offset,

@@ -51,6 +51,7 @@
     /* Z-index for sticky elements */
     .top-bar {
         z-index: 1050;
+        background-color: #a9262b;
     }
 
     .main-navbar {
@@ -86,7 +87,7 @@
     /* --- Custom Button Styles --- */
 
     .btn-login-custom {
-        background-color: #8FE388;
+        background-color: #fafcf9;
         color: #1A1A1A;
         border: none;
         padding: 10px 28px;
@@ -95,21 +96,21 @@
     }
 
     .btn-login-custom:hover {
-        background-color: #78d273;
+        background-color: #ffffff;
         color: #000;
     }
 </style>
 
 {{-- TOP BAR (Logo and Cart) - STICKY --}}
-<div class="top-bar py-3 border-bottom bg-white shadow-sm sticky-top">
-    <div class="container d-flex justify-content-between align-items-center">
+<div class="top-bar py-3 sticky-top">
+    <div class="container d-flex justify-content-between align-items-center" >
         <a class="navbar-brand fw-bold fs-3" href="#">
             <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" width="120px" style="border-radius: 10px">
         </a>
 
         <div class="d-flex align-items-center gap-3">
-            <button class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 rounded-pill d-none d-lg-block">
-                Sign In / Sign Up
+            <button class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 d-none d-lg-block">
+                Register Now
             </button>
 
             {{-- Cart Button to open Offcanvas --}}
