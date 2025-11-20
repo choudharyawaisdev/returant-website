@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-         Schema::create('sizes', function (Blueprint $table) {
+         Schema::create('menu_sizes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('menu_id'); // Relation with menus
             $table->string('name'); // Small, Medium, Large, XL
