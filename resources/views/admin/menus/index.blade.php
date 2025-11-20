@@ -32,7 +32,6 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Discount</th>
-                                    <th>Created At</th>
                                     <th>Action</th> <!-- Added Action column -->
                                 </tr>
                             </thead>
@@ -53,7 +52,6 @@
                                         <td>{{ $menu->description }}</td>
                                         <td>{{ number_format($menu->price, 2) }}</td>
                                         <td>{{ number_format($menu->discount, 2) }}</td>
-                                        <td>{{ $menu->created_at->format('d-m-Y h:i A') }}</td>
                                         <td>
                                             <!-- Edit Button -->
                                             <a href="{{ route('admin.menus.edit', $menu->id) }}"
