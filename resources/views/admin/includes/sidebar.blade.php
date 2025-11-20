@@ -21,31 +21,31 @@
                 <!-- Dashboard -->
                 <li class="slide">
                     <a href="{{ url('admin.dashboard') }}" class="side-menu__item">
-                        <i class="fa-solid fa-gauge-high side-menu__icon text-sm"></i>
+                        <i class="fa-solid fa-house side-menu__icon text-sm"></i>
                         <span class="side-menu__label">Dashboard</span>
                     </a>
                 </li>
 
                 <!-- Orders -->
                 <li class="slide mt-2">
-                    <a href="{{ url('admin.orders') }}" class="side-menu__item">
-                        <i class="fa-solid fa-cart-shopping side-menu__icon"></i>
+                    <a href="{{ url('admin/orders') }}" class="side-menu__item">
+                        <i class="fa-solid fa-cart-flatbed side-menu__icon"></i>
                         <span class="side-menu__label">Orders</span>
                     </a>
                 </li>
 
-                <!-- Add User -->
+                <!-- Add Ons -->
                 <li class="slide mt-2">
-                    <a href="{{ route('admin.adduser.index') }}" class="side-menu__item">
-                        <i class="fa-solid fa-user-gear side-menu__icon"></i>
-                        <span class="side-menu__label">Add User</span>
+                    <a href="{{ url('addons/index') }}" class="side-menu__item">
+                        <i class="fa-solid fa-burger side-menu__icon"></i>
+                        <span class="side-menu__label">Add Ons</span>
                     </a>
                 </li>
 
                 <!-- Categories -->
                 <li class="slide mt-2">
                     <a href="{{ route('admin.categories.index') }}" class="side-menu__item">
-                        <i class="fa-solid fa-tags side-menu__icon"></i>
+                        <i class="fa-solid fa-layer-group side-menu__icon"></i>
                         <span class="side-menu__label">Categories</span>
                     </a>
                 </li>

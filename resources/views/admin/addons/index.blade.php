@@ -29,7 +29,6 @@
                             <thead>
                                 <tr>
                                     <th>Sr</th>
-                                    <th>Menu</th>
                                     <th>Name</th>
                                     <th>Price</th>
                                     <th>Created At</th>
@@ -40,12 +39,11 @@
                                 @foreach ($adons as $index => $adon)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $adon->menu->title ?? 'N/A' }}</td>
                                         <td>{{ $adon->name }}</td>
                                         <td>{{ number_format($adon->price, 2) }}</td>
                                         <td>{{ $adon->created_at->format('d-m-Y') }}</td>
                                         <td>
-                                            <form action="{{ route('admin.adons.destroy', $adon->id) }}" method="POST"
+                                            <form action="{{ route('admin.addons.destroy', $adon->id) }}" method="POST"
                                                 class="d-inline" onsubmit="return confirmDelete()">
                                                 @csrf
                                                 @method('DELETE')
@@ -85,16 +83,6 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="menu_id">Menu</label>
-                            <select class="form-control" name="menu_id" id="menu_id" required>
-                                <option value="">Select Menu</option>
-                                @foreach ($menus as $menu)
-                                    <option value="{{ $menu->id }}">{{ $menu->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
                         <div class="form-group mt-3">
                             <label for="name">Add-on Name</label>
                             <input type="text" class="form-control" name="name" id="name" required>

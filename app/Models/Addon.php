@@ -14,4 +14,9 @@ class Addon extends Model
         'price',
     ];
 
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
+
 }
