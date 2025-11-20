@@ -16,20 +16,8 @@ class Menu extends Model
         'category_id',
     ];
 
-    public function sizes()
-    {
-        return $this->hasMany(Size::class);
-    }
-
-    public function addons()
-    {
-        return $this->hasMany(MenuAddon::class);
-    }
-
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
-
-
 }
