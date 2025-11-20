@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Models\MenuSize;
+use App\Models\Size;
+use App\Models\Addon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -20,23 +21,12 @@ class MenuController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.menus.create', compact('categories'));
+        $addons = Addon::all();
+        return view('admin.menus.create', compact('categories', 'addons'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'discount' => 'nullable|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'single_price' => 'nullable|numeric|min:0',
-            'type' => 'nullable|array', 
-            'type.*' => 'nullable|string|max:100',
-            'price' => 'nullable|array', 
-            'price.*' => 'nullable|numeric|min:0',
-        ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
@@ -46,40 +36,36 @@ class MenuController extends Controller
             $imagePath = 'menu_images/' . $imageName;
         }
 
-        $discount = $request->input('discount') ?? 0;
-        $createdPriceOptionsCount = 0;
-        
         DB::beginTransaction();
         try {
             $menuItem = Menu::create([
                 'category_id' => $request->category_id,
                 'title' => $request->title,
                 'description' => $request->description,
-                'discount' => $discount,
+                'discount' => $request->discount ?? 0,
                 'image' => $imagePath,
-                'price' => 0,
-                'type' => null, 
             ]);
 
             $menuId = $menuItem->id;
+            $createdPriceOptionsCount = 0;
 
+            // Single price
             if (is_numeric($request->single_price)) {
-                MenuSize::create([
+                Size::create([
                     'menu_id' => $menuId,
                     'name' => 'Default',
                     'price' => $request->single_price,
                 ]);
                 $createdPriceOptionsCount++;
             }
-            
+
+            // Type-price rows
             $types = $request->input('type', []);
             $prices = $request->input('price', []);
-            
             foreach ($types as $index => $type) {
                 $price = $prices[$index] ?? null;
-
                 if (!empty($type) && is_numeric($price)) {
-                    MenuSize::create([
+                    Size::create([
                         'menu_id' => $menuId,
                         'name' => $type,
                         'price' => $price,
@@ -87,23 +73,28 @@ class MenuController extends Controller
                     $createdPriceOptionsCount++;
                 }
             }
-            
+
             if ($createdPriceOptionsCount === 0) {
                 throw new \Exception('At least one price field is required.');
             }
 
+            // Save add-ons
+            if ($request->has('addons')) {
+                $menuItem->addons()->sync($request->addons);
+            }
+
             DB::commit();
-            
+            return redirect()->route('admin.menus.index')->with('success', "Menu item created successfully with $createdPriceOptionsCount price option(s).");
+
         } catch (\Exception $e) {
             DB::rollBack();
-            if ($e->getMessage() === 'At least one price field is required.') {
-                 return redirect()->back()->withInput()->withErrors(['single_price' => $e->getMessage()]);
-            }
-            return redirect()->back()->withInput()->withErrors(['error' => 'An unexpected error occurred during creation.']);
+            $errorMsg = $e->getMessage() === 'At least one price field is required.'
+                ? ['single_price' => $e->getMessage()]
+                : ['error' => 'An unexpected error occurred during creation.'];
+            return redirect()->back()->withInput()->withErrors($errorMsg);
         }
-
-        return redirect()->route('admin.menus.index')->with('success', "Menu item created successfully with $createdPriceOptionsCount price option(s).");
     }
+
 
     public function edit(string $id)
     {

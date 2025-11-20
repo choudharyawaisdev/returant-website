@@ -65,6 +65,23 @@
                                     <small class="form-text text-muted">Use this field OR the Type/Price rows below, not
                                         both.</small>
                                 </div>
+                                <div class="col-6 mb-3">
+                                    <label for="addons" class="form-label">Add Ons (Optional)</label>
+                                    <div
+                                        style="max-height:150px; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:5px;">
+                                        @foreach ($addons as $addon)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="addons[]"
+                                                    value="{{ $addon->id }}" id="addon{{ $addon->id }}"
+                                                    {{ is_array(old('addons')) && in_array($addon->id, old('addons')) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="addon{{ $addon->id }}">
+                                                    {{ $addon->name }} - ${{ number_format($addon->price, 2) }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row mb-3">
@@ -111,58 +128,52 @@
 
                             <button type="submit" class="btn btn-primary">Add Menu</button>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const categoryTypes = {
+            'Pizza': ['Personal', 'Small Pizza', 'Medium Pizza'],
+            'Burger': ['Single', 'Double', 'Triple', 'Zinger'],
+            'Drinks': ['Small', 'Regular', 'Large', 'XL'],
+            'Fries': ['Fries Small', 'Fries Large'],
+            'Platter': ['Single', 'Double', 'Half', 'Large'],
+            'Wings': ['4 Pcs Wings', '6 Pcs Wings'],
+            'Pasta': ['Pasta Small', 'Pasta Large'],
+            'Sandwich': ['Sandwich Small', 'Sandwich Large'],
+            'Rolls': ['Chicken Roll', 'Beef Roll'],
+            'Nuggets & Shots': ['4 Pcs', '6 Pcs', '12 Pcs']
+        };
 
-                        <script>
-                            const categoryTypes = {
-                                'Pizza': ['Personal', 'Small Pizza', 'Medium Pizza', 'Large Pizza', 'XL Pizza', 'Cheese Burst',
-                                    'Stuffed Crust'
-                                ],
-                                'Burger': ['Single', 'Double', 'Triple', 'Zinger', 'Grilled Beef', 'Crispy Chicken', 'Beef Patty',
-                                    'Chicken Patty', 'Cheese', 'Grilled Cheese'
-                                ],
-                                'Drinks': ['Small', 'Regular', 'Large', 'XL', 'Jumbo'],
-                                'Fries': ['Fries Small', 'Fries Large', 'Masala Fries', 'Loaded Fries'],
-                                'Platter': ['Single', 'Double', 'Half', 'Large'],
-                                'Wings': ['4 Pcs Wings', '6 Pcs Wings', '8 Pcs Wings', 'Spicy Wings', 'Crispy Wings'],
-                                'Pasta': ['Pasta Small', 'Pasta Large', 'Creamy Pasta', 'Cheese Pasta', 'Chicken Pasta'],
-                                'Sandwich': ['Sandwich Small', 'Sandwich Large', 'Grilled Sandwich', 'Chicken Sandwich', 'Beef Sandwich',
-                                    'Club Sandwich'
-                                ],
-                                'Rolls': ['Chicken Roll', 'Beef Roll', 'Zinger Roll', 'Crispy Roll', 'Mayo Garlic Roll'],
-                                'Nuggets & Shots': ['4 Pcs', '6 Pcs', '12 Pcs']
-                            };
+        const categorySelect = document.getElementById('category_id');
+        const typePriceContainer = document.getElementById('typePriceContainer');
+        const addRowBtn = document.getElementById('addRowBtn');
+        let rowCounter = 0;
 
-                            const categorySelect = document.getElementById('category_id');
-                            const typePriceContainer = document.getElementById('typePriceContainer');
-                            const addRowBtn = document.getElementById('addRowBtn');
+        function createTypeSelectHtml(options, selectedValue = '') {
+            let html = '<select class="form-control mb-1 type-select" name="type[]">';
+            html += '<option value="">-- Select Type --</option>';
+            options.forEach(option => {
+                const selected = option === selectedValue ? 'selected' : '';
+                html += `<option value="${option}" ${selected}>${option}</option>`;
+            });
+            html += '</select>';
+            return html;
+        }
 
-                            let rowCounter = 0;
+        function addTypePriceRow(typeValue = '', priceValue = '', isDefault = false) {
+            const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+            const typeOptions = categoryTypes[selectedText] || [];
 
-                            function createTypeSelectHtml(options, selectedValue = '') {
-                                let html = '<select class="form-control mb-1 type-select" name="type[]">';
-                                html += '<option value="">-- Select Type --</option>';
-                                options.forEach(option => {
-                                    const selected = option === selectedValue ? 'selected' : '';
-                                    html += `<option value="${option}" ${selected}>${option}</option>`;
-                                });
-                                html += '</select>';
-                                return html;
-                            }
+            const row = document.createElement('div');
+            row.classList.add('row', 'mb-2', 'align-items-end', 'type-price-row');
 
-                            function addTypePriceRow(typeValue = '', priceValue = '', isDefault = false) {
-                                const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
-                                const typeOptions = categoryTypes[selectedText] || [];
+            const removeButtonHtml = isDefault ? '' :
+                '<button type="button" class="btn btn-danger btn-sm remove-row-btn">Remove</button>';
 
-                                const row = document.createElement('div');
-                                row.classList.add('row', 'mb-2', 'align-items-end', 'type-price-row');
-
-                                const removeButtonHtml = isDefault ?
-                                    '' // No remove button for default row
-                                    :
-                                    '<button type="button" class="btn btn-danger btn-sm remove-row-btn">Remove</button>';
-
-                                // Use name="type[]" and name="price[]" for array submission
-                                row.innerHTML = `
+            row.innerHTML = `
             <div class="col-5">
                 ${createTypeSelectHtml(typeOptions, typeValue)}
             </div>
@@ -174,90 +185,55 @@
             </div>
         `;
 
-                                if (!isDefault) {
-                                    row.querySelector('.remove-row-btn').addEventListener('click', () => {
-                                        row.remove();
-                                    });
-                                }
-
-                                typePriceContainer.appendChild(row);
-                                rowCounter++;
-                            }
-
-                            function handleCategoryChange() {
-                                typePriceContainer.innerHTML = '';
-                                const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
-
-                                // Show the default row only if a category that needs sizing is selected
-                                if (categoryTypes[selectedText]) {
-                                    // Add the default row (isDefault = true)
-                                    addTypePriceRow('{{ old('type.0') }}', '{{ old('price.0') }}', true);
-
-                                    // If there are more old inputs (for validation error display), add them with remove buttons
-                                    const oldTypes = {!! json_encode(old('type') ?: []) !!};
-                                    const oldPrices = {!! json_encode(old('price') ?: []) !!};
-
-                                    if (oldTypes.length > 1) {
-                                        for (let i = 1; i < oldTypes.length; i++) {
-                                            addTypePriceRow(oldTypes[i], oldPrices[i] || '');
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Event Listeners
-                            categorySelect.addEventListener('change', handleCategoryChange);
-
-                            // Add new row button
-                            addRowBtn.addEventListener('click', () => {
-                                const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
-                                if (categoryTypes[selectedText]) {
-                                    // Add a new removable row (isDefault = false)
-                                    addTypePriceRow('', '', false);
-                                } else {
-                                    alert('Please select a Category first to add size/type options.');
-                                }
-                            });
-
-                            // Run on page load to handle validation errors and old input
-                            if (categorySelect.value) {
-                                handleCategoryChange();
-                            }
-
-                            // Image Preview Script
-                            function previewImage(event) {
-                                const reader = new FileReader();
-                                reader.onload = function() {
-                                    const output = document.getElementById('imagePreview');
-                                    output.src = reader.result;
-                                    output.style.display = 'block';
-                                }
-                                reader.readAsDataURL(event.target.files[0]);
-                            }
-                        </script>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Preview Script -->
-    <script>
-        function previewImage(event) {
-            const input = event.target;
-            const preview = document.getElementById('imagePreview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none';
+            if (!isDefault && row.querySelector('.remove-row-btn')) {
+                row.querySelector('.remove-row-btn').addEventListener('click', () => row.remove());
             }
+
+            typePriceContainer.appendChild(row);
+            rowCounter++;
+        }
+
+        function handleCategoryChange() {
+            typePriceContainer.innerHTML = '';
+            const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+
+            if (categoryTypes[selectedText]) {
+                addTypePriceRow('{{ old('type.0') }}', '{{ old('price.0') }}', true);
+
+                const oldTypes = {!! json_encode(old('type') ?: []) !!};
+                const oldPrices = {!! json_encode(old('price') ?: []) !!};
+
+                if (oldTypes.length > 1) {
+                    for (let i = 1; i < oldTypes.length; i++) {
+                        addTypePriceRow(oldTypes[i], oldPrices[i] || '');
+                    }
+                }
+            }
+        }
+
+        categorySelect.addEventListener('change', handleCategoryChange);
+
+        addRowBtn.addEventListener('click', () => {
+            const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+            if (categoryTypes[selectedText]) {
+                addTypePriceRow('', '', false);
+            } else {
+                alert('Please select a Category first to add size/type options.');
+            }
+        });
+
+        if (categorySelect.value) {
+            handleCategoryChange();
+        }
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('imagePreview');
+                output.src = reader.result;
+                output.style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
         }
     </script>
 @endsection

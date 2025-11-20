@@ -23,7 +23,8 @@ class Menu extends Model
 
     public function addons()
     {
-        return $this->hasMany(Addon::class);
+        return $this->belongsToMany(Addon::class, 'menu_addon');
     }
+
 
 }
