@@ -20,4 +20,10 @@ class Menu extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function addons()
+    {
+        return $this->hasMany(Addon::class);
+    }
+
 }

@@ -5,7 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AddUserController;
-
+use App\Http\Controllers\AdonsController;
 use App\Http\Controllers\CartController;
 
 
@@ -18,6 +18,7 @@ Route::get('/menu/search', [MenuController::class, 'search'])->name('menu.search
 // You might show a mini-cart on the menu page, but a full page is needed.
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menus', MenuController::class);
+    Route::resource('addons', AdonsController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('adduser', AddUserController::class);
 });
