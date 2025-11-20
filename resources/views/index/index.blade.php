@@ -227,9 +227,6 @@
     @endforeach
 
 
-    {{-- LOCATION MODAL --}}
-
-
     {{-- PRODUCT MODAL (For Quantity Selection) --}}
     <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">

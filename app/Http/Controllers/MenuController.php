@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\File;
 
 class MenuController extends Controller
 {
-    public function index()
+    public function frontendMenu()
     {
-        $menus = Menu::with('category')->orderBy('created_at', 'desc')->get();
-        return view('admin.menus.index', compact('menus'));
+        $categories = Category::with(['menus.sizes', 'menus.addons'])->get();
+        return view('frontend.menu', compact('categories'));
     }
 
     public function create()
