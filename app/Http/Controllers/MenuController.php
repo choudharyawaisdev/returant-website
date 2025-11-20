@@ -25,75 +25,106 @@ class MenuController extends Controller
         return view('admin.menus.create', compact('categories', 'addons'));
     }
 
-    public function store(Request $request)
-    {
+public function store(Request $request)
+{
+    $request->validate([
+        'category_id' => 'required|exists:categories,id',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'discount' => 'nullable|numeric|min:0',
+        'image' => 'nullable|image|max:2048',
+        'single_price' => 'nullable|numeric|min:0',
+        'type' => 'nullable|array',
+        'type.*' => 'nullable|string|max:100',
+        'price' => 'nullable|array',
+        'price.*' => 'nullable|numeric|min:0',
+    ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('menu_images'), $imageName);
-            $imagePath = 'menu_images/' . $imageName;
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time().'.'.$image->getClientOriginalExtension();
+        $image->move(public_path('menu_images'), $imageName);
+        $imagePath = 'menu_images/'.$imageName;
+    }
+
+    $createdPriceOptionsCount = 0;
+
+    DB::transaction(function() use ($request, $imagePath, &$createdPriceOptionsCount) {
+
+        // -----------------------------
+        // 1️⃣ SAVE FIRST PRICE IN MENUS
+        // -----------------------------
+        $firstPrice = null;
+
+        // If single price exists → use it as main menu price
+        if (is_numeric($request->single_price)) {
+            $firstPrice = $request->single_price;
+        } 
+        // otherwise check first type-price row
+        else {
+            $types = $request->input('type', []);
+            $prices = $request->input('price', []);
+
+            if (!empty($prices[0]) && is_numeric($prices[0])) {
+                $firstPrice = $prices[0];
+            }
         }
 
-        DB::beginTransaction();
-        try {
-            $menuItem = Menu::create([
-                'category_id' => $request->category_id,
-                'title' => $request->title,
-                'description' => $request->description,
-                'discount' => $request->discount ?? 0,
-                'image' => $imagePath,
+        // still empty? error
+        if (!is_numeric($firstPrice)) {
+            abort(422, "At least one price is required.");
+        }
+
+        // Create Menu
+        $menuItem = Menu::create([
+            'category_id' => $request->category_id,
+            'title'       => $request->title,
+            'description' => $request->description,
+            'discount'    => $request->discount ?? 0,
+            'image'       => $imagePath,
+            'price'       => $firstPrice,       // 🔥 MAIN PRICE
+        ]);
+
+        $menuId = $menuItem->id;
+
+        // -----------------------------------------------------
+        // 2️⃣ SAVE SECOND PRICE & MORE IN menu_sizes TABLE
+        // -----------------------------------------------------
+
+        // If single_price was given → store it as Default
+        if (is_numeric($request->single_price)) {
+            Size::create([
+                'menu_id' => $menuId,
+                'name'    => 'Default',
+                'price'   => $request->single_price,
             ]);
+            $createdPriceOptionsCount++;
+        }
 
-            $menuId = $menuItem->id;
-            $createdPriceOptionsCount = 0;
+        // Save all other type price rows
+        $types  = $request->input('type', []);
+        $prices = $request->input('price', []);
 
-            // Single price
-            if (is_numeric($request->single_price)) {
+        foreach ($types as $index => $type) {
+            $price = $prices[$index] ?? null;
+
+            if (!empty($type) && is_numeric($price)) {
                 Size::create([
                     'menu_id' => $menuId,
-                    'name' => 'Default',
-                    'price' => $request->single_price,
+                    'name'    => $type,
+                    'price'   => $price,
                 ]);
                 $createdPriceOptionsCount++;
             }
-
-            // Type-price rows
-            $types = $request->input('type', []);
-            $prices = $request->input('price', []);
-            foreach ($types as $index => $type) {
-                $price = $prices[$index] ?? null;
-                if (!empty($type) && is_numeric($price)) {
-                    Size::create([
-                        'menu_id' => $menuId,
-                        'name' => $type,
-                        'price' => $price,
-                    ]);
-                    $createdPriceOptionsCount++;
-                }
-            }
-
-            if ($createdPriceOptionsCount === 0) {
-                throw new \Exception('At least one price field is required.');
-            }
-
-            // Save add-ons
-            if ($request->has('addons')) {
-                $menuItem->addons()->sync($request->addons);
-            }
-
-            DB::commit();
-            return redirect()->route('admin.menus.index')->with('success', "Menu item created successfully with $createdPriceOptionsCount price option(s).");
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            $errorMsg = $e->getMessage() === 'At least one price field is required.'
-                ? ['single_price' => $e->getMessage()]
-                : ['error' => 'An unexpected error occurred during creation.'];
-            return redirect()->back()->withInput()->withErrors($errorMsg);
         }
-    }
+
+    });
+
+    return redirect()->route('admin.menus.index')
+        ->with('success', "Menu created successfully with $createdPriceOptionsCount price option(s).");
+}
+
 
 
     public function edit(string $id)
