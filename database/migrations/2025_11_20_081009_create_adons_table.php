@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('addons', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('menu_id');
             $table->string('name');
             $table->decimal('price', 8, 2)->default(0);
             $table->timestamps();
