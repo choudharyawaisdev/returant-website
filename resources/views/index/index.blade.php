@@ -303,9 +303,7 @@
             </div>
         </div>
     </div>
-
-
-    {{-- CART OFFCANVAS (Right Sidebar - Remaining same) --}}
+    {{-- CART OFFCANVAS (Right Sidebar) --}}
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel"
         style="border-radius: 25px 0px 0px 25px">
         <div class="offcanvas-header border-bottom">
@@ -320,7 +318,7 @@
             </div>
 
             <div class="mt-4 pt-3 border-top" id="cartSummary" style="display: none;">
-                <div class="d-flex justify-content-between fw-bold mb-3">
+                <div class="d-flex justify-content-between fw-bold mb-2">
                     <span>Subtotal:</span>
                     <span id="cartSubtotal">Rs. 0/-</span>
                 </div>
@@ -336,14 +334,13 @@
 
             let basePrice = 0;
             let selectedSizeExtra = 0;
+            let selectedSizeName = '';
             let currentMenu = {};
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                'content');
 
             const modal = new bootstrap.Modal(document.getElementById('productModal'));
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const modalImage = document.getElementById('modalImage');
-            const modalMenuId = document.getElementById('modalMenuId');
-
+            const addToCartForm = document.getElementById('addToCartForm');
             const qtyInput = document.getElementById('qtyInput');
             const modalQtyDisplay = document.getElementById('modalQtyDisplay');
             const modalTotalPriceDisplay = document.getElementById('modalTotalPriceDisplay');
@@ -351,28 +348,53 @@
             const sizesContainer = document.getElementById('sizesContainer');
             const sizeOptions = document.getElementById('sizeOptions');
             const selectedSizeId = document.getElementById('selectedSizeId');
-
-            const addOnsContainer = document.getElementById('addOnsContainer');
             const addOnsOptions = document.getElementById('addOnsOptions');
+            const selectedAddOnsJson = document.getElementById('selectedAddOnsJson');
+
+            const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const emptyCartMessage = document.getElementById('emptyCartMessage');
+            const cartSummary = document.getElementById('cartSummary');
+            const cartSubtotal = document.getElementById('cartSubtotal');
+            const cartCountHeader = document.getElementById('cartCountHeader');
+
+
+            function getSelectedAddOns() {
+                const selectedAddOns = [];
+                addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked').forEach(cb => {
+                    selectedAddOns.push({
+                        id: cb.value,
+                        name: cb.dataset
+                            .name,
+                        price: parseFloat(cb.dataset.price)
+                    });
+                });
+                return selectedAddOns;
+            }
 
             function updateTotalPrice() {
                 let price = basePrice + selectedSizeExtra;
+                const selectedAddOns = getSelectedAddOns();
 
-                addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked').forEach(cb => {
-                    price += parseFloat(cb.dataset.price);
+                selectedAddOns.forEach(addOn => {
+                    price += addOn.price;
                 });
 
                 const qty = parseInt(qtyInput.value);
                 const finalPrice = price * qty;
 
-                modalTotalPriceDisplay.textContent = `Total: Rs. ${finalPrice}/-`;
+                modalTotalPriceDisplay.textContent = `Total: Rs. ${finalPrice.toFixed(2)}/-`;
                 modalQtyDisplay.textContent = qty;
             }
 
             function renderSizes(sizes) {
                 sizeOptions.innerHTML = '';
+
                 if (sizes.length === 0) {
                     sizesContainer.style.display = "none";
+                    selectedSizeName = '';
+                    selectedSizeExtra = 0; // Reset extra price if no sizes
+                    selectedSizeId.value = '';
                     return;
                 }
 
@@ -382,23 +404,26 @@
                     const extra = parseFloat(size.price) - basePrice;
 
                     const html = `
-                <div class="form-check mb-2">
-                    <input type="radio" class="form-check-input size-radio"
-                        name="size_id"
-                        value="${size.id}"
-                        data-extra="${extra}"
-                        id="size_${size.id}"
-                        ${index === 0 ? 'checked' : ''}>
-                    <label class="form-check-label" for="size_${size.id}">
-                        ${size.name} (${size.price})
-                    </label>
-                </div>
-            `;
+                    <div class="form-check mb-2">
+                        <input type="radio" class="form-check-input size-radio"
+                            name="size_id"
+                            value="${size.id}"
+                            data-extra="${extra}"
+                            data-name="${size.name}"
+                            data-price="${size.price}"
+                            id="size_${size.id}"
+                            ${index === 0 ? 'checked' : ''}>
+                        <label class="form-check-label" for="size_${size.id}">
+                            ${size.name} (Rs. ${size.price})
+                        </label>
+                    </div>
+                `;
                     sizeOptions.insertAdjacentHTML('beforeend', html);
 
                     if (index === 0) {
                         selectedSizeExtra = extra;
                         selectedSizeId.value = size.id;
+                        selectedSizeName = size.name;
                     }
                 });
             }
@@ -406,29 +431,81 @@
             function renderAddOns(addons) {
                 addOnsOptions.innerHTML = '';
                 if (addons.length === 0) {
-                    addOnsContainer.style.display = "none";
+                    document.getElementById('addOnsContainer').style.display = "none";
                     return;
                 }
 
-                addOnsContainer.style.display = "block";
+                document.getElementById('addOnsContainer').style.display = "block";
 
                 addons.forEach(add => {
                     const html = `
-                <div class="form-check mb-2">
-                    <input type="checkbox" 
-                        class="form-check-input addon-checkbox"
-                        name="add_ons[]" 
-                        value="${add.id}" 
-                        data-price="${add.price}"
-                        id="addon_${add.id}">
-                    <label class="form-check-label d-flex justify-content-between" for="addon_${add.id}">
-                        <span>${add.name}</span>
-                        <span class="text-success fw-bold">+ Rs. ${add.price}</span>
-                    </label>
-                </div>
-            `;
+                    <div class="form-check mb-2">
+                        <input type="checkbox" 
+                            class="form-check-input addon-checkbox"
+                            name="add_ons[]" 
+                            value="${add.id}" 
+                            data-price="${add.price}"
+                            data-name="${add.name}"
+                            id="addon_${add.id}">
+                        <label class="form-check-label d-flex justify-content-between" for="addon_${add.id}">
+                            <span>${add.name}</span>
+                            <span class="text-success fw-bold">+ Rs. ${parseFloat(add.price).toFixed(2)}</span>
+                        </label>
+                    </div>
+                `;
                     addOnsOptions.insertAdjacentHTML('beforeend', html);
                 });
+            }
+
+            function renderCart(cartItems, cartCount, subtotal) {
+                cartItemsContainer.innerHTML = '';
+
+                if (cartItems.length === 0) {
+                    emptyCartMessage.style.display = 'block';
+                    cartSummary.style.display = 'none';
+                } else {
+                    emptyCartMessage.style.display = 'none';
+                    cartSummary.style.display = 'block';
+
+                    cartItems.forEach(item => {
+                        let priceDisplay = `Rs. ${(item.price * item.quantity).toFixed(2)}/-`;
+
+                        let optionsHtml = '';
+                        if (item.size_name) {
+                            optionsHtml +=
+                                `<small class="d-block text-muted">Size: ${item.size_name}</small>`;
+                        }
+                        if (item.add_ons && item.add_ons.length > 0) {
+                            optionsHtml +=
+                                `<small class="d-block text-muted">Add-ons: ${item.add_ons.map(ao => ao.name).join(', ')}</small>`;
+                        }
+
+                        const itemHtml = `
+                        <div class="d-flex align-items-center mb-3 pb-3 border-bottom cart-item" data-configkey="${item.configKey}">
+                            <img src="${item.image}" alt="${item.title}" class="rounded-3 me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                            <div class="flex-grow-1">
+                                <h6 class="fw-bold mb-0">${item.title}</h6>
+                                ${optionsHtml}
+                                <div class="d-flex align-items-center mt-1">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary me-2 update-qty" data-action="decrement" data-configkey="${item.configKey}">-</button>
+                                    <span class="fw-bold">${item.quantity}</span>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary ms-2 update-qty" data-action="increment" data-configkey="${item.configKey}">+</button>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-bold d-block">${priceDisplay}</span>
+                                <button type="button" class="btn btn-sm text-danger remove-item" data-configkey="${item.configKey}">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                        cartItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+                    });
+                }
+
+                cartSubtotal.textContent = `Rs. ${subtotal.toFixed(2)}/-`;
+                cartCountHeader.textContent = cartCount;
             }
 
             document.querySelectorAll('.product-card').forEach(card => {
@@ -437,23 +514,26 @@
 
                     qtyInput.value = 1;
                     selectedSizeExtra = 0;
+                    selectedSizeName = '';
 
-                    currentMenu.id = card.dataset.id;
-                    currentMenu.title = card.dataset.title;
-                    currentMenu.description = card.dataset.description;
-                    currentMenu.image = card.dataset.image;
-                    basePrice = parseFloat(card.dataset.price);
+                    currentMenu = {
+                        id: card.dataset.id,
+                        title: card.dataset.title,
+                        description: card.dataset.description,
+                        image: card.dataset.image,
+                        basePrice: parseFloat(card.dataset.price),
+                        sizes: JSON.parse(card.dataset.sizes || '[]'),
+                        addons: JSON.parse(card.dataset.addons || '[]'),
+                    };
+                    basePrice = currentMenu.basePrice;
 
-                    modalTitle.innerText = currentMenu.title;
-                    modalDescription.innerText = currentMenu.description;
-                    modalImage.src = currentMenu.image;
-                    modalMenuId.value = currentMenu.id;
+                    document.getElementById('modalTitle').innerText = currentMenu.title;
+                    document.getElementById('modalDescription').innerText = currentMenu.description;
+                    document.getElementById('modalImage').src = currentMenu.image;
+                    document.getElementById('modalMenuId').value = currentMenu.id;
 
-                    const sizes = JSON.parse(card.dataset.sizes);
-                    const addons = JSON.parse(card.dataset.addons);
-
-                    renderSizes(sizes);
-                    renderAddOns(addons);
+                    renderSizes(currentMenu.sizes);
+                    renderAddOns(currentMenu.addons);
 
                     updateTotalPrice();
                 });
@@ -474,6 +554,7 @@
                 if (e.target.classList.contains('size-radio')) {
                     selectedSizeExtra = parseFloat(e.target.dataset.extra);
                     selectedSizeId.value = e.target.value;
+                    selectedSizeName = e.target.dataset.name;
                     updateTotalPrice();
                 }
 
@@ -482,6 +563,134 @@
                 }
             });
 
+            addToCartForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const selectedAddOns = getSelectedAddOns();
+
+                formData.append('title', currentMenu.title);
+                formData.append('image', currentMenu.image);
+                formData.append('quantity', qtyInput.value);
+                formData.append('base_price', basePrice + selectedSizeExtra);
+                formData.append('size_name', selectedSizeName);
+
+                formData.append('add_ons_json', JSON.stringify(selectedAddOns));
+
+                fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: new URLSearchParams(
+                            formData),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            modal.hide();
+                            alert(data.message);
+
+                            fetchCartData();
+                            cartOffcanvas.show();
+                        } else {
+                            alert('Error: ' + (data.message || 'Could not add item to cart.'));
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error adding to cart:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            });
+
+            function fetchCartData() {
+                fetch('/cart/get')
+                    .then(response => response.json())
+                    .then(data => {
+                        renderCart(data.cart, data.cartCount, data.subtotal);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cart data:', error);
+                    });
+            }
+
+            fetchCartData();
+
+            cartItemsContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.update-qty');
+                if (btn) {
+                    const configKey = btn.dataset.configkey;
+                    const action = btn.dataset.action;
+                    const currentQtyEl = btn.parentElement.querySelector('span');
+                    let currentQty = parseInt(currentQtyEl.textContent);
+                    let newQty = currentQty;
+
+                    if (action === 'increment') {
+                        newQty += 1;
+                    } else if (action === 'decrement' && currentQty > 1) {
+                        newQty -= 1;
+                    } else if (action === 'decrement' && currentQty === 1) {
+                        if (confirm('Are you sure you want to remove this item?')) {
+                            removeItem(configKey);
+                            return;
+                        }
+                        return;
+                    } else {
+                        return;
+                    }
+
+                    updateCartItemQuantity(configKey, newQty);
+                }
+
+                const removeBtn = e.target.closest('.remove-item');
+                if (removeBtn) {
+                    removeItem(removeBtn.dataset.configkey);
+                }
+            });
+
+            function updateCartItemQuantity(configKey, quantity) {
+                fetch('/cart/update-quantity', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                        body: JSON.stringify({
+                            configKey: configKey,
+                            quantity: quantity
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchCartData();
+                        } else {
+                            alert('Error updating quantity: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error updating quantity:', error));
+            }
+
+            function removeItem(configKey) {
+                fetch(`/cart/remove/${configKey}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            fetchCartData();
+                        } else {
+                            alert('Error removing item: ' + data.message);
+                        }
+                    })
+                    .catch(error => console.error('Error removing item:', error));
+            }
+
+
         });
     </script>
+
 @endsection

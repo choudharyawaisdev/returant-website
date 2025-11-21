@@ -15,6 +15,7 @@ Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
 Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
 Route::post('/cart/add', [MenuController::class, 'add'])->name('cart.add');
 Route::get('/menu/search', [MenuController::class, 'search'])->name('menu.search');
+
 // You might show a mini-cart on the menu page, but a full page is needed.
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menus', MenuController::class);
@@ -24,18 +25,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 
-// ... other routes
-
 Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::delete('/cart/remove/{configKey}', [CartController::class, 'removeFromCart'])->name('cart.remove'); 
+Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity'); 
 Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
-Route::get('/cart', [MenuController::class, 'index'])->name('cart.index');
-
-// Checkout Page
+Route::get('/cart', [MenuController::class, 'index'])->name('cart.index'); 
 Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
-
-// Order Submission
 Route::post('/order', [CartController::class, 'placeOrder'])->name('order.place');
+
+
+
 
 // Dummy Success Page (Create this view later)
 Route::get('/order/success', function () {
