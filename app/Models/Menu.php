@@ -20,4 +20,15 @@ class Menu extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function sizes()
+    {
+        return $this->hasMany(MenuSize::class);
+    }
+
+    public function addons()
+    {
+        return $this->belongsToMany(Addon::class, 'menu_addon', 'menu_id', 'addon_id');
+    }
+
 }

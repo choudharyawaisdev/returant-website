@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
-use App\Models\Size;
+use App\Models\MenuSize;
 use App\Models\Addon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\File;
 
 class MenuController extends Controller
 {
-    public function frontendMenu()
+    public function index()
     {
-        $categories = Category::with(['menus.sizes', 'menus.addons'])->get();
-        return view('frontend.menu', compact('categories'));
+        $menus = Menu::all();
+        return view('admin.menus.index', compact('menus'));
     }
 
     public function create()
@@ -25,105 +25,92 @@ class MenuController extends Controller
         return view('admin.menus.create', compact('categories', 'addons'));
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'category_id' => 'required|exists:categories,id',
-        'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
-        'discount' => 'nullable|numeric|min:0',
-        'image' => 'nullable|image|max:2048',
-        'single_price' => 'nullable|numeric|min:0',
-        'type' => 'nullable|array',
-        'type.*' => 'nullable|string|max:100',
-        'price' => 'nullable|array',
-        'price.*' => 'nullable|numeric|min:0',
-    ]);
-
-    $imagePath = null;
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time().'.'.$image->getClientOriginalExtension();
-        $image->move(public_path('menu_images'), $imageName);
-        $imagePath = 'menu_images/'.$imageName;
-    }
-
-    $createdPriceOptionsCount = 0;
-
-    DB::transaction(function() use ($request, $imagePath, &$createdPriceOptionsCount) {
-
-        // -----------------------------
-        // 1️⃣ SAVE FIRST PRICE IN MENUS
-        // -----------------------------
-        $firstPrice = null;
-
-        // If single price exists → use it as main menu price
-        if (is_numeric($request->single_price)) {
-            $firstPrice = $request->single_price;
-        } 
-        // otherwise check first type-price row
-        else {
-            $types = $request->input('type', []);
-            $prices = $request->input('price', []);
-
-            if (!empty($prices[0]) && is_numeric($prices[0])) {
-                $firstPrice = $prices[0];
-            }
-        }
-
-        // still empty? error
-        if (!is_numeric($firstPrice)) {
-            abort(422, "At least one price is required.");
-        }
-
-        // Create Menu
-        $menuItem = Menu::create([
-            'category_id' => $request->category_id,
-            'title'       => $request->title,
-            'description' => $request->description,
-            'discount'    => $request->discount ?? 0,
-            'image'       => $imagePath,
-            'price'       => $firstPrice,       // 🔥 MAIN PRICE
+    public function store(Request $request)
+    {
+        $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'discount' => 'nullable|numeric|min:0',
+            'image' => 'nullable|image',
+            'single_price' => 'nullable|numeric|min:0',
+            'type' => 'nullable|array',
+            'type.*' => 'nullable|string|max:100',
+            'price' => 'nullable|array',
+            'price.*' => 'nullable|numeric|min:0',
+            'addons' => 'nullable|array',
+            'addons.*' => 'nullable|exists:addons,id',
         ]);
 
-        $menuId = $menuItem->id;
+        $imagePath = null;
 
-        // -----------------------------------------------------
-        // 2️⃣ SAVE SECOND PRICE & MORE IN menu_sizes TABLE
-        // -----------------------------------------------------
-
-        // If single_price was given → store it as Default
-        if (is_numeric($request->single_price)) {
-            Size::create([
-                'menu_id' => $menuId,
-                'name'    => 'Default',
-                'price'   => $request->single_price,
-            ]);
-            $createdPriceOptionsCount++;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('menu_images'), $imageName);
+            $imagePath = 'menu_images/' . $imageName;
         }
 
-        // Save all other type price rows
-        $types  = $request->input('type', []);
-        $prices = $request->input('price', []);
+        $createdPriceOptionsCount = 0;
 
-        foreach ($types as $index => $type) {
-            $price = $prices[$index] ?? null;
+        DB::transaction(function () use ($request, $imagePath, &$createdPriceOptionsCount) {
 
-            if (!empty($type) && is_numeric($price)) {
-                Size::create([
-                    'menu_id' => $menuId,
-                    'name'    => $type,
-                    'price'   => $price,
-                ]);
-                $createdPriceOptionsCount++;
+            $firstPrice = null;
+
+            if (is_numeric($request->single_price)) {
+                $firstPrice = $request->single_price;
+            } else {
+                $prices = $request->input('price', []);
+                if (!empty($prices[0]) && is_numeric($prices[0])) {
+                    $firstPrice = $prices[0];
+                }
             }
-        }
 
-    });
+            if (!is_numeric($firstPrice)) {
+                abort(422, "At least one price is required.");
+            }
 
-    return redirect()->route('admin.menus.index')
-        ->with('success', "Menu created successfully with $createdPriceOptionsCount price option(s).");
-}
+            $menuItem = Menu::create([
+                'category_id' => $request->category_id,
+                'title'       => $request->title,
+                'description' => $request->description,
+                'discount'    => $request->discount ?? 0,
+                'image'       => $imagePath,
+                'price'       => $firstPrice,
+            ]);
+
+            $menuId = $menuItem->id;
+
+            $types  = $request->input('type', []);
+            $prices = $request->input('price', []);
+
+            foreach ($types as $index => $type) {
+                $price = $prices[$index] ?? null;
+
+                if (!empty($type) && is_numeric($price)) {
+                    MenuSize::create([
+                        'menu_id' => $menuId,
+                        'name'    => $type,
+                        'price'   => $price,
+                    ]);
+                    $createdPriceOptionsCount++;
+                }
+            }
+
+            if ($request->has('addons')) {
+                foreach ($request->addons as $addonId) {
+                    DB::table('menu_addon')->insert([
+                        'menu_id' => $menuId,
+                        'addon_id' => $addonId,
+                    ]);
+                }
+            }
+
+        });
+
+        return redirect()->route('admin.menus.create')
+            ->with('success', "Menu created successfully with $createdPriceOptionsCount price option(s).");
+    }
 
 
 

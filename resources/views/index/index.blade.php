@@ -192,8 +192,7 @@
                             <div class="card shadow-sm p-3 product-card" data-id="{{ $menu->id }}"
                                 data-title="{{ $menu->title }}" data-description="{{ $menu->description }}"
                                 data-price="{{ $menu->price }}" data-image="{{ $menu->image }}"
-                                data-sizes="{{ $menu->sizes->toJson() }}"
-                                data-addons="{{ $menu->addons->toJson() }}">
+                                data-sizes="{{ $menu->sizes->toJson() }}" data-addons="{{ $menu->addons->toJson() }}">
 
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
@@ -236,59 +235,74 @@
 
                     <div class="modal-header border-0">
                         <h5 class="modal-title fw-bold" id="modalTitle"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
 
                     <div class="modal-body d-flex flex-column flex-md-row">
-                        <img id="modalImage" src="" alt="" class="rounded-4 me-md-3 mb-3 mb-md-0"
-                            style="width:200px; height:200px; object-fit:cover;">
-                        
+                        <img id="modalImage" class="rounded-4 me-md-3 mb-3"
+                            style="width:200px;height:200px;object-fit:cover;">
+
                         <div class="flex-grow-1">
+
                             <p id="modalDescription" class="text-muted"></p>
 
-                            {{-- DYNAMIC SIZE OPTIONS --}}
-                            <div id="sizesContainer" class="mb-3" style="display:none;">
-                                <h6 class="fw-bold mb-2">Select Size</h6>
-                                <div id="sizeOptions" class="d-flex flex-wrap gap-2">
-                                    {{-- Size radio buttons will be injected here --}}
-                                </div>
-                                <input type="hidden" name="selected_size_id" id="selectedSizeId">
-                            </div>
+                            <!-- Accordion Start -->
+                            <div class="accordion" id="menuAccordion">
 
-                            {{-- DYNAMIC ADD-ON OPTIONS --}}
-                            <div id="addOnsContainer" class="mb-3" style="display:none;">
-                                <h6 class="fw-bold mb-2">Add-ons (Optional)</h6>
-                                <div id="addOnsOptions">
-                                    {{-- Add-on checkboxes will be injected here --}}
+                                <!-- Sizes -->
+                                <div class="accordion-item" id="sizesContainer" style="display:none;">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#sizesCollapse">
+                                            Sizes
+                                        </button>
+                                    </h2>
+                                    <div id="sizesCollapse" class="accordion-collapse collapse">
+                                        <div class="accordion-body" id="sizeOptions"></div>
+                                    </div>
                                 </div>
+
+                                <!-- Add-ons -->
+                                <div class="accordion-item" id="addOnsContainer" style="display:none;">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#addonsCollapse">
+                                            Add-ons
+                                        </button>
+                                    </h2>
+                                    <div id="addonsCollapse" class="accordion-collapse collapse">
+                                        <div class="accordion-body" id="addOnsOptions"></div>
+                                    </div>
+                                </div>
+
                             </div>
+                            <!-- Accordion End -->
 
                             <div class="mt-3">
                                 <h6 class="fw-bold mb-2">Quantity</h6>
                                 <div class="d-flex align-items-center">
-                                    <button type="button" class="quantity-btn me-1" id="qtyDecrement">-</button>
-                                    <input type="number" id="qtyInput" value="1" min="1" name="quantity"
-                                        class="form-control text-center" style="width:60px;" readonly>
-                                    <button type="button" class="quantity-btn ms-1" id="qtyIncrement">+</button>
+                                    <button type="button" id="qtyDecrement" class="quantity-btn">-</button>
+                                    <input type="number" id="qtyInput" value="1" min="1"
+                                        class="form-control text-center mx-2" style="width:60px;" readonly>
+                                    <button type="button" id="qtyIncrement" class="quantity-btn">+</button>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <span class="fw-bold modal-price-badge" id="modalTotalPriceDisplay">
-                                    Total: Rs. 0/-
-                                </span>
-                                <button type="submit" class="btn btn-custom-primary fw-bold rounded-pill"
-                                    id="addToCartButton">
+                                <span id="modalTotalPriceDisplay" class="fw-bold">Total: Rs. 0/-</span>
+                                <button type="submit" class="btn btn-custom-primary fw-bold rounded-pill">
                                     Add <span id="modalQtyDisplay">1</span> Item to Cart
                                 </button>
                             </div>
+
+                            <input type="hidden" id="selectedSizeId" name="size_id">
+
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    {{-- END MODIFIED PRODUCT MODAL --}}
 
 
     {{-- CART OFFCANVAS (Right Sidebar - Remaining same) --}}
@@ -317,254 +331,157 @@
         </div>
     </div>
 
-    {{-- MODIFIED JAVASCRIPT LOGIC --}}
     <script>
-        // Note: I'm keeping your existing cart functions but modifying the modal logic heavily.
-        // Assuming your Laravel routes are defined:
-        // const ADD_TO_CART_URL = "{{ route('cart.add') }}";
-        // const GET_CART_URL = "{{ route('cart.get') }}";
-        // const CSRF_TOKEN = "{{ csrf_token() }}";
-
         document.addEventListener("DOMContentLoaded", function() {
 
-            // --- Cart/UI initialization (Keeping your original logic for existing code) ---
-            const cartBadge = document.getElementById('cartBadge');
-            const cartCountHeader = document.getElementById('cartCountHeader');
-            const cartItemsContainer = document.getElementById('cartItemsContainer');
-            const cartSubtotal = document.getElementById('cartSubtotal');
-            const cartSummary = document.getElementById('cartSummary');
-            const emptyCartMessage = document.getElementById('emptyCartMessage');
-            const productModalElement = document.getElementById('productModal');
-            const productModal = new bootstrap.Modal(productModalElement);
-            // ... (Your existing cart update, add, remove functions should remain here) ...
+            let basePrice = 0;
+            let selectedSizeExtra = 0;
+            let currentMenu = {};
 
-
-            // --- NEW MODAL VARIABLES ---
-            let basePrice = 0; // Base price of the menu item
-            let selectedSizePrice = 0; // Price difference due to size
-            let currentMenuData = {}; // Stores all data from the card
-
+            const modal = new bootstrap.Modal(document.getElementById('productModal'));
             const modalTitle = document.getElementById('modalTitle');
             const modalDescription = document.getElementById('modalDescription');
             const modalImage = document.getElementById('modalImage');
             const modalMenuId = document.getElementById('modalMenuId');
-            
+
             const qtyInput = document.getElementById('qtyInput');
             const modalQtyDisplay = document.getElementById('modalQtyDisplay');
             const modalTotalPriceDisplay = document.getElementById('modalTotalPriceDisplay');
-            const addToCartForm = document.getElementById('addToCartForm');
-            
+
             const sizesContainer = document.getElementById('sizesContainer');
             const sizeOptions = document.getElementById('sizeOptions');
             const selectedSizeId = document.getElementById('selectedSizeId');
-            
+
             const addOnsContainer = document.getElementById('addOnsContainer');
             const addOnsOptions = document.getElementById('addOnsOptions');
 
-
-            // --- PRICE CALCULATION LOGIC ---
             function updateTotalPrice() {
-                // 1. Calculate Add-ons Price
-                let addOnsPrice = 0;
-                const selectedAddOns = addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked');
-                selectedAddOns.forEach(checkbox => {
-                    addOnsPrice += parseFloat(checkbox.dataset.price) || 0;
+                let price = basePrice + selectedSizeExtra;
+
+                addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked').forEach(cb => {
+                    price += parseFloat(cb.dataset.price);
                 });
 
-                // 2. Calculate Total Item Price (Base + Size Diff + Add-ons)
-                // Note: The selectedSizePrice stores the DIFFERENCE, not the full price.
-                const pricePerItem = basePrice + selectedSizePrice + addOnsPrice;
+                const qty = parseInt(qtyInput.value);
+                const finalPrice = price * qty;
 
-                // 3. Calculate Final Price (Total Item Price * Quantity)
-                const quantity = parseInt(qtyInput.value) || 1;
-                const finalTotal = pricePerItem * quantity;
-
-                // 4. Update UI
-                modalTotalPriceDisplay.textContent = `Total: Rs. ${finalTotal.toFixed(0)}/-`;
-                modalQtyDisplay.textContent = quantity;
+                modalTotalPriceDisplay.textContent = `Total: Rs. ${finalPrice}/-`;
+                modalQtyDisplay.textContent = qty;
             }
 
-            // --- RENDER FUNCTIONS ---
             function renderSizes(sizes) {
                 sizeOptions.innerHTML = '';
-                sizesContainer.style.display = sizes.length > 0 ? 'block' : 'none';
-
-                if (sizes.length > 0) {
-                    sizes.forEach((size, index) => {
-                        // The size price here is relative to the menu item's base price
-                        const priceDifference = parseFloat(size.price) - basePrice;
-                        const isChecked = index === 0;
-
-                        const sizeHtml = `
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input size-option-radio" type="radio" name="size_id" 
-                                       id="size_${size.id}" value="${size.id}" 
-                                       data-price="${priceDifference}" ${isChecked ? 'checked' : ''}>
-                                <label class="form-check-label" for="size_${size.id}">
-                                    ${size.name} 
-                                    <span class="text-muted small">${priceDifference > 0 ? '(+Rs. ' + priceDifference.toFixed(0) + '/-)' : ''}</span>
-                                </label>
-                            </div>
-                        `;
-                        sizeOptions.insertAdjacentHTML('beforeend', sizeHtml);
-
-                        if (isChecked) {
-                            selectedSizePrice = priceDifference;
-                            selectedSizeId.value = size.id; // Set default selected ID
-                        }
-                    });
+                if (sizes.length === 0) {
+                    sizesContainer.style.display = "none";
+                    return;
                 }
+
+                sizesContainer.style.display = "block";
+
+                sizes.forEach((size, index) => {
+                    const extra = parseFloat(size.price) - basePrice;
+
+                    const html = `
+                <div class="form-check mb-2">
+                    <input type="radio" class="form-check-input size-radio"
+                        name="size_id"
+                        value="${size.id}"
+                        data-extra="${extra}"
+                        id="size_${size.id}"
+                        ${index === 0 ? 'checked' : ''}>
+                    <label class="form-check-label" for="size_${size.id}">
+                        ${size.name} (${size.price})
+                    </label>
+                </div>
+            `;
+                    sizeOptions.insertAdjacentHTML('beforeend', html);
+
+                    if (index === 0) {
+                        selectedSizeExtra = extra;
+                        selectedSizeId.value = size.id;
+                    }
+                });
             }
 
-            function renderAddOns(addOns) {
+            function renderAddOns(addons) {
                 addOnsOptions.innerHTML = '';
-                addOnsContainer.style.display = addOns.length > 0 ? 'block' : 'none';
-
-                if (addOns.length > 0) {
-                    addOns.forEach(addOn => {
-                        const addOnHtml = `
-                            <div class="form-check">
-                                <input class="form-check-input addon-checkbox" type="checkbox" 
-                                       name="add_ons[]" value="${addOn.id}" id="addon_${addOn.id}" 
-                                       data-price="${addOn.price}">
-                                <label class="form-check-label d-flex justify-content-between" for="addon_${addOn.id}">
-                                    <span>${addOn.name}</span>
-                                    <span class="text-success fw-bold">+ Rs. ${parseFloat(addOn.price).toFixed(0)}/-</span>
-                                </label>
-                            </div>
-                        `;
-                        addOnsOptions.insertAdjacentHTML('beforeend', addOnHtml);
-                    });
+                if (addons.length === 0) {
+                    addOnsContainer.style.display = "none";
+                    return;
                 }
+
+                addOnsContainer.style.display = "block";
+
+                addons.forEach(add => {
+                    const html = `
+                <div class="form-check mb-2">
+                    <input type="checkbox" 
+                        class="form-check-input addon-checkbox"
+                        name="add_ons[]" 
+                        value="${add.id}" 
+                        data-price="${add.price}"
+                        id="addon_${add.id}">
+                    <label class="form-check-label d-flex justify-content-between" for="addon_${add.id}">
+                        <span>${add.name}</span>
+                        <span class="text-success fw-bold">+ Rs. ${add.price}</span>
+                    </label>
+                </div>
+            `;
+                    addOnsOptions.insertAdjacentHTML('beforeend', html);
+                });
             }
-            
-            // --- EVENT LISTENERS ---
-            
-            // 1. Open Modal and Load Data
+
             document.querySelectorAll('.product-card').forEach(card => {
                 card.addEventListener('click', (e) => {
-                    // Only respond to the button click for the modal
                     if (!e.target.closest('.add-to-cart-trigger')) return;
 
-                    // Reset state
                     qtyInput.value = 1;
-                    selectedSizePrice = 0;
-                    selectedSizeId.value = '';
+                    selectedSizeExtra = 0;
 
-                    // Get data from card attributes
-                    currentMenuData.id = card.dataset.id;
-                    currentMenuData.title = card.dataset.title;
-                    currentMenuData.description = card.dataset.description;
-                    basePrice = parseFloat(card.dataset.price); // Set base price for calculation
-                    currentMenuData.image = card.dataset.image;
+                    currentMenu.id = card.dataset.id;
+                    currentMenu.title = card.dataset.title;
+                    currentMenu.description = card.dataset.description;
+                    currentMenu.image = card.dataset.image;
+                    basePrice = parseFloat(card.dataset.price);
 
-                    // Parse JSON data for sizes and add-ons
+                    modalTitle.innerText = currentMenu.title;
+                    modalDescription.innerText = currentMenu.description;
+                    modalImage.src = currentMenu.image;
+                    modalMenuId.value = currentMenu.id;
+
                     const sizes = JSON.parse(card.dataset.sizes);
                     const addons = JSON.parse(card.dataset.addons);
-                    
-                    // Set modal data
-                    modalTitle.innerText = currentMenuData.title;
-                    modalDescription.innerText = currentMenuData.description;
-                    modalImage.src = currentMenuData.image;
-                    modalMenuId.value = currentMenuData.id;
 
-                    // Render dynamic options
                     renderSizes(sizes);
                     renderAddOns(addons);
-                    
-                    // Initial price update
+
                     updateTotalPrice();
                 });
             });
 
-            // 2. Quantity Change Listener
             document.getElementById('qtyIncrement').addEventListener('click', () => {
-                let currentQty = parseInt(qtyInput.value) || 1;
-                qtyInput.value = currentQty + 1;
+                qtyInput.value = parseInt(qtyInput.value) + 1;
                 updateTotalPrice();
             });
+
             document.getElementById('qtyDecrement').addEventListener('click', () => {
-                let currentQty = parseInt(qtyInput.value) || 1;
-                if (currentQty > 1) {
-                    qtyInput.value = currentQty - 1;
-                    updateTotalPrice();
-                }
+                let qty = parseInt(qtyInput.value);
+                if (qty > 1) qtyInput.value = qty - 1;
+                updateTotalPrice();
             });
 
-            // 3. Size/Add-on Change Listener (Delegation)
-            productModalElement.addEventListener('change', function(e) {
-                if (e.target.closest('.size-option-radio')) {
-                    selectedSizePrice = parseFloat(e.target.dataset.price) || 0;
+            document.getElementById('productModal').addEventListener('change', (e) => {
+                if (e.target.classList.contains('size-radio')) {
+                    selectedSizeExtra = parseFloat(e.target.dataset.extra);
                     selectedSizeId.value = e.target.value;
                     updateTotalPrice();
-                } else if (e.target.closest('.addon-checkbox')) {
+                }
+
+                if (e.target.classList.contains('addon-checkbox')) {
                     updateTotalPrice();
                 }
             });
 
-            // 4. Form Submission (Add to Cart)
-            addToCartForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Final calculation of the price *per item* (Base + Size + Add-ons)
-                let itemPrice = basePrice + selectedSizePrice;
-                addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked').forEach(checkbox => {
-                    itemPrice += parseFloat(checkbox.dataset.price) || 0;
-                });
-                
-                const quantity = parseInt(qtyInput.value) || 1;
-                
-                // Collect all selected add-ons
-                const selectedAddOns = Array.from(addOnsOptions.querySelectorAll('input[name="add_ons[]"]:checked'))
-                                            .map(cb => cb.value);
-
-                // This is the data structure you should send to your backend CartController:
-                const cartData = {
-                    menu_id: modalMenuId.value,
-                    quantity: quantity,
-                    price_per_item: itemPrice.toFixed(2), // Price including size/addons
-                    size_id: selectedSizeId.value, // Will be empty if no sizes exist/selected
-                    add_on_ids: selectedAddOns,
-                    // Optionally pass names for better logging
-                    title: modalTitle.innerText, 
-                    image: modalImage.src 
-                };
-
-                // --- Implement your actual AJAX call here ---
-                /*
-                fetch(ADD_TO_CART_URL, { 
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': CSRF_TOKEN
-                    },
-                    body: JSON.stringify(cartData)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    // Handle success (e.g., show notification, update cart offcanvas)
-                    updateCartUI(); 
-                    productModal.hide();
-                })
-                .catch(error => {
-                    console.error('Error adding to cart:', error);
-                });
-                */
-                
-                // DEMO ALERT (Remove this when implementing the actual fetch)
-                alert('Sending to cart:\n' + JSON.stringify(cartData, null, 2));
-                productModal.hide();
-            });
-
-
-            // ... (Your existing scroll and intersection observer logic should follow) ...
         });
     </script>
-    {{-- END MODIFIED JAVASCRIPT LOGIC --}}
-
-    <div class="d-lg-none p-3 border-top">
-        <a href="/login" class="btn btn-outline-dark w-100 mb-2 rounded-pill fw-bold">Sign In</a>
-        <a href="/register" class="btn btn-custom-primary w-100 rounded-pill fw-bold">Sign Up</a>
-    </div>
-
 @endsection
