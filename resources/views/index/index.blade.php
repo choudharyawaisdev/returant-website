@@ -14,7 +14,9 @@
             transform: translateY(-4px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
-
+        #categoryMenu::-webkit-scrollbar {
+            display: none;
+        }
         h2.section-title {
             font-size: 2rem;
             font-weight: 700;
@@ -22,7 +24,7 @@
         }
 
         .price-tag {
-            background-color: #1A1A1A;
+            background-color: green;
             color: #FFC000;
             padding: 4px 10px;
             border-radius: 6px;
@@ -89,12 +91,6 @@
             left: 0;
         }
     </style>
-    <style>
-        /* Hide scrollbar */
-        #categoryMenu::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
     @php
         $categoryNames = [
             1 => 'Platter',
@@ -121,7 +117,6 @@
             </div>
         </div>
     </div>
-
 
     {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
     <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top py-2">
