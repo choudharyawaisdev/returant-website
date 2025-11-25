@@ -39,7 +39,9 @@ Route::post('/wishlist/add', [WishlistController::class, 'store'])
 Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
     ->name('wishlist.toggle')
     ->middleware('auth');
-
+Route::get('/wishlist', [WishlistController::class, 'menu'])
+    ->name('wishlist.index')
+    ->middleware('auth');
 
 Route::post('/save-location', function(\Illuminate\Http\Request $request) {
     session([
