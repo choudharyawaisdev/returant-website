@@ -9,6 +9,7 @@ use App\Http\Controllers\AdonsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\LocationController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -39,16 +40,8 @@ Route::controller(MenuController::class)->group(function () {
     Route::get('/menu/search', 'search')->name('menu.search'); // Search menu
 });
 Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
-
-
-Route::post('/save-location', function(\Illuminate\Http\Request $request) {
-    session([
-        'city' => $request->city,
-        'area' => $request->area
-    ]);
-    return response()->json(['status' => 'success']);
-})->name('location.save');
-
+Route::get('/location', [LocationController::class, 'show'])->name('location.show');
+Route::post('/location', [LocationController::class, 'store'])->name('location.store');
 
 // Dummy Success Page (Create this view later)
 Route::get('/order/success', function () {
