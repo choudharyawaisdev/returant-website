@@ -8,16 +8,9 @@ use App\Http\Controllers\AddUserController;
 use App\Http\Controllers\AdonsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PagesController;
 
 
-
-
-Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
-Route::get('/menu/{menu}', [MenuController::class, 'show'])->name('menu.show');
-Route::post('/cart/add', [MenuController::class, 'add'])->name('cart.add');
-Route::get('/menu/search', [MenuController::class, 'search'])->name('menu.search');
-
-// You might show a mini-cart on the menu page, but a full page is needed.
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('menus', MenuController::class);
     Route::resource('addons', AdonsController::class);
@@ -25,23 +18,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('adduser', AddUserController::class);
 });
 
+Route::middleware('auth')->group(function () {
+    Route::post('/client/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::get('/client/wishlist', [WishlistController::class, 'menu'])->name('wishlist.index');
+    Route::get('/client/order', [PagesController::class, 'index'])->name('client.order');
+});
 
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::delete('/cart/remove/{configKey}', [CartController::class, 'removeFromCart'])->name('cart.remove'); 
-Route::post('/cart/update-quantity', [CartController::class, 'updateQuantity'])->name('cart.updateQuantity'); 
-Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
-Route::get('/cart', [MenuController::class, 'index'])->name('cart.index'); 
-Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
-Route::post('/order', [CartController::class, 'placeOrder'])->name('order.place');
-Route::post('/wishlist/add', [WishlistController::class, 'store'])
-    ->name('wishlist.store')
-    ->middleware('auth');
-Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
-    ->name('wishlist.toggle')
-    ->middleware('auth');
-Route::get('/wishlist', [WishlistController::class, 'menu'])
-    ->name('wishlist.index')
-    ->middleware('auth');
+Route::controller(CartController::class)->middleware('auth')->group(function () {
+    Route::post('/cart/add', 'addToCart')->name('cart.add');
+    Route::delete('/cart/remove/{configKey}', 'removeFromCart')->name('cart.remove');
+    Route::post('/cart/update-quantity', 'updateQuantity')->name('cart.updateQuantity');
+    Route::get('/cart/get', 'getCart')->name('cart.get');
+    Route::get('/cart', 'index')->name('cart.index');        // View cart
+    Route::get('/checkout', 'index')->name('checkout.index'); // Checkout page
+    Route::post('/order', 'placeOrder')->name('order.place'); // Place order
+});
+
+Route::controller(MenuController::class)->group(function () {
+    Route::get('/menu/{menu}', 'show')->name('menu.show');     // Single menu view
+    Route::get('/menu/search', 'search')->name('menu.search'); // Search menu
+});
+Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
+
 
 Route::post('/save-location', function(\Illuminate\Http\Request $request) {
     session([
