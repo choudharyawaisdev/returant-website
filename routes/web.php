@@ -33,7 +33,13 @@ Route::get('/cart', [MenuController::class, 'index'])->name('cart.index');
 Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
 Route::post('/order', [CartController::class, 'placeOrder'])->name('order.place');
 
-
+Route::post('/save-location', function(\Illuminate\Http\Request $request) {
+    session([
+        'city' => $request->city,
+        'area' => $request->area
+    ]);
+    return response()->json(['status' => 'success']);
+})->name('location.save');
 
 
 // Dummy Success Page (Create this view later)

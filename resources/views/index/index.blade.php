@@ -221,6 +221,67 @@
         @endif
     @endforeach
 
+    <!-- City / Area Modal -->
+<div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content p-3 rounded-4">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Select Your Area</h5>
+            </div>
+            <div class="modal-body">
+                <form id="locationForm">
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" id="city" class="form-control" value="{{ $city }}" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="area" class="form-label">Area</label>
+                        <select id="area" class="form-select" required>
+                            <option value="">Select Area</option>
+                            @foreach($chinotAreas as $area)
+                                <option value="{{ $area }}">{{ $area }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+    locationModal.show();
+
+    document.getElementById('locationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var selectedArea = document.getElementById('area').value;
+        if(!selectedArea) {
+            alert('Please select your area.');
+            return;
+        }
+        // Save to session via AJAX or localStorage
+        fetch("{{ route('location.save') }}", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                city: document.getElementById('city').value,
+                area: selectedArea
+            })
+        }).then(res => res.json())
+          .then(data => {
+              locationModal.hide();
+          });
+    });
+});
+</script>
+
+
     {{-- MODIFIED: PRODUCT MODAL (For Quantity, Sizes, and Add-ons) --}}
     <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
