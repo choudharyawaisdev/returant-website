@@ -169,8 +169,7 @@
                     <div class="mb-4 bg-light p-3" style="border-radius:10px">
                         <p class="mb-3 fw-bold">Payment Method</p>
                         <div class="form-check cod-option p-3 border rounded">
-                            <input class="form-check-input" type="radio" name="payment_method" id="cod"
-                                value="COD" checked>
+
                             <label class="form-check-label d-flex align-items-center" for="cod">
                                 <i class="fas fa-money-bill-wave me-2"
                                     style="color: var(--success-green); font-size: 1.5rem;"></i>
@@ -195,7 +194,7 @@
                                 <div class="d-flex w-100">
                                     <img src="{{ $item['image'] ?? 'https://via.placeholder.com/60' }}"
                                         alt="{{ $item['title'] }}" class="img-fluid rounded me-3"
-                                        style="width:60px; height:60px; object-fit:cover;">
+                                        style="height:60px; object-fit:cover;">
                                     <div class="flex-grow-1">
                                         <h6 class="my-0 fw-bold">{{ $item['title'] }}</h6>
 
@@ -246,7 +245,7 @@
                     </ul>
 
                     {{-- The button submits the main form using its ID --}}
-                    <button type="submit" form="checkoutForm" class="btn btn-lg btn-custom-primary w-100 mt-3">
+                    <button type="submit" form="checkoutForm" class="btn btn-lg w-100 mt-3 text-white" style="background-color: #a9262b">
                         <i class="fas fa-motorcycle me-2"></i> Place Order Now
                     </button>
                 </div>
@@ -341,7 +340,8 @@
                         document.getElementById('modalAddress').value =
                             `Address near Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}. (Refine Manually)`;
                         alert(
-                            'Location retrieved. Please refine the street address and select the region.');
+                            'Location retrieved. Please refine the street address and select the region.'
+                            );
                     }, function(error) {
                         document.getElementById('modalAddress').value = '';
                         alert('Unable to retrieve your location: ' + error.message);
