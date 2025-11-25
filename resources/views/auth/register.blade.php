@@ -1,60 +1,201 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<!doctype html>
+<html lang="en">
 
-        <x-validation-errors class="mb-4" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Cafe Chinos — Register</title>
 
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-            <div>
-                <x-label for="name" value="{{ __('Name') }}" />
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+    <style>
+        :root {
+            --accent: #b7410e;
+            --muted: #f7f4f2;
+            --deep: #2b2b2b;
+            --card: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(180deg, #fffaf7, #fff6f0, #fff);
+            font-family: Inter, 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-card {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+        }
+
+        /* LEFT: Form */
+        .auth-form {
+            flex: 0 0 50%;
+            background: var(--card);
+            padding: 2.4rem 2.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--deep);
+        }
+
+        .muted {
+            color: #6b6b6b;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 .15rem rgba(183, 65, 14, .15);
+            border-color: var(--accent);
+        }
+
+        .input-group-text {
+            background: #fff;
+            border-left: 0;
+            cursor: pointer;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            border: 0;
+            color: #fff;
+            padding: .65rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .btn-accent:hover {
+            background: #9a3b0d;
+        }
+
+        /* RIGHT: Image */
+        .auth-visual {
+            flex: 1;
+            min-height: 470px;
+            background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .visual-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        @media(max-width:768px) {
+            .auth-visual {
+                display: none;
+            }
+        }
+
+        @media(max-width:991px) {
+            .auth-card {
+                flex-direction: column;
+            }
+
+            .auth-form {
+                width: 100%;
+            }
+
+            .auth-visual {
+                min-height: 230px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+
+        <!-- LEFT: Register Form -->
+        <div class="auth-form">
+            <div class="mb-3">
+                <div class="form-title">Create your account</div>
+                <small class="muted">Register to continue</small>
             </div>
 
-            <div class="mt-4">
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            </div>
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
 
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            </div>
-
-            <div class="mt-4">
-                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-            </div>
-
-            @if (Laravel\Jetstream\Jetstream::hasTermsAndPrivacyPolicyFeature())
-                <div class="mt-4">
-                    <x-label for="terms">
-                        <div class="flex items-center">
-                            <x-checkbox name="terms" id="terms" required />
-
-                            <div class="ms-2">
-                                {!! __('I agree to the :terms_of_service and :privacy_policy', [
-                                        'terms_of_service' => '<a target="_blank" href="'.route('terms.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Terms of Service').'</a>',
-                                        'privacy_policy' => '<a target="_blank" href="'.route('policy.show').'" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">'.__('Privacy Policy').'</a>',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </x-label>
+                <div class="form-group">
+                    <label class="small font-weight-600">Full Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="John Doe" required>
                 </div>
-            @endif
 
-            <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
-                </a>
+                <div class="form-group">
+                    <label class="small font-weight-600">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="name@domain.com" required>
+                </div>
 
-                <x-button class="ms-4">
-                    {{ __('Register') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+                <div class="form-group">
+                    <label class="small font-weight-600">Password</label>
+                    <div class="input-group">
+                        <input id="password" type="password" name="password" class="form-control"
+                            placeholder="Enter password" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="togglePwd"><i class="fa fa-eye"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="small font-weight-600">Confirm Password</label>
+                    <div class="input-group">
+                        <input id="passwordConfirm" type="password" name="password_confirmation" class="form-control"
+                            placeholder="Confirm password" required>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="togglePwd2"><i class="fa fa-eye"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-accent btn-block mb-3" type="submit">Register</button>
+
+                <div class="text-center mt-2">
+                    <small class="muted">Already have an account? <a href="/login">Login</a></small>
+                </div>
+            </form>
+
+        </div>
+
+        <!-- RIGHT: Image with no text -->
+        <div class="auth-visual">
+            <div class="visual-overlay"></div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggle(id, iconId) {
+            const field = document.getElementById(id);
+            const icon = document.getElementById(iconId).querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        document.getElementById('togglePwd').onclick = () => toggle('password', 'togglePwd');
+        document.getElementById('togglePwd2').onclick = () => toggle('passwordConfirm', 'togglePwd2');
+    </script>
+</body>
+
+</html>

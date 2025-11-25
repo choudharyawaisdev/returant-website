@@ -54,14 +54,6 @@
                             </p>
                         </div>
 
-                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
-                            <h6 class="text-uppercase mb-4 fw-bold">Products</h6>
-                            <p><a class="text-dark">Product One</a></p>
-                            <p><a class="text-dark">Product Two</a></p>
-                            <p><a class="text-dark">Product Three</a></p>
-                            <p><a class="text-dark">Product Four</a></p>
-                        </div>
-
                         <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
                             <h6 class="text-uppercase mb-4 fw-bold">Useful Links</h6>
                             <p><a class="text-dark">Your Account</a></p>
@@ -84,11 +76,14 @@
 
                 <section class="p-3 pt-0">
                     <div class="row d-flex align-items-center">
-                        <div class="col-md-7 col-lg-8 text-center text-md-start">
+                        <div class="col-md-7 col-lg-8  text-md-start">
                             <div class="p-3">
                                 © 2025 Copyright:
-                                <a class="text-dark fw-bold" href="#">YourWebsite.com</a>
+                                <a class="text-dark fw-bold" href="#">cafechinos.cafe</a>
+                                <br>
+                                <span class="text-muted">Developed by <strong>DevtaSoft Company</strong></span>
                             </div>
+
                         </div>
 
                         <div class="col-md-5 col-lg-4 text-center text-md-end">

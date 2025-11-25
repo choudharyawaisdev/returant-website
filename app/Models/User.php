@@ -64,4 +64,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

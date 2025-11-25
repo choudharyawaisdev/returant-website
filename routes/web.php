@@ -6,6 +6,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AddUserController;
 use App\Http\Controllers\AdonsController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
 
 
@@ -32,6 +33,13 @@ Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
 Route::get('/cart', [MenuController::class, 'index'])->name('cart.index'); 
 Route::get('/checkout', [CartController::class, 'index'])->name('checkout.index');
 Route::post('/order', [CartController::class, 'placeOrder'])->name('order.place');
+Route::post('/wishlist/add', [WishlistController::class, 'store'])
+    ->name('wishlist.store')
+    ->middleware('auth');
+Route::post('/wishlist/toggle', [WishlistController::class, 'toggle'])
+    ->name('wishlist.toggle')
+    ->middleware('auth');
+
 
 Route::post('/save-location', function(\Illuminate\Http\Request $request) {
     session([

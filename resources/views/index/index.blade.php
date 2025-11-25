@@ -14,9 +14,11 @@
             transform: translateY(-4px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
+
         #categoryMenu::-webkit-scrollbar {
             display: none;
         }
+
         h2.section-title {
             font-size: 2rem;
             font-weight: 700;
@@ -171,15 +173,20 @@
     </div>
 
     {{-- MAIN MENU SECTIONS --}}
+    @php
+        $wishlistMenus = [];
+
+        if (auth()->check()) {
+            $wishlistMenus = auth()->user()->wishlists()->pluck('menu_id')->toArray();
+        }
+    @endphp
+
     @foreach ($categories as $category)
         @if ($category->menus->count())
-            {{-- Section ID is critical for navigation to work --}}
             <section class="container my-5" id="{{ Str::slug($categoryNames[$category->id] ?? $category->name) }}">
-
                 <h2 class="section-title">
                     {{ $categoryNames[$category->id] ?? $category->name }}
                 </h2>
-
                 <div class="row g-4">
                     @foreach ($category->menus as $menu)
                         <div class="col-12 col-md-6 col-lg-4">
@@ -192,7 +199,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <img src="{{ $menu->image }}" alt="{{ $menu->title }}" class="rounded-4"
-                                            style="width:120px; height:120px; object-fit:cover;">
+                                            style=" height:120px; object-fit:cover;">
                                     </div>
 
                                     <div class="flex-grow-1 ms-3">
@@ -210,9 +217,14 @@
                                             data-bs-toggle="modal" data-bs-target="#productModal">
                                             Add To Cart
                                         </button>
+                                        <div class="position-absolute top-0 end-0 m-2">
+                                            <button class="btn btn-light rounded-circle shadow wishlist-btn"
+                                                data-id="{{ $menu->id }}">
+                                                <i class="fa-regular fa-heart fs-5"></i> <!-- outline heart -->
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     @endforeach
@@ -222,65 +234,34 @@
     @endforeach
 
     <!-- City / Area Modal -->
-<div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content p-3 rounded-4">
-            <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold">Select Your Area</h5>
-            </div>
-            <div class="modal-body">
-                <form id="locationForm">
-                    <div class="mb-3">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" id="city" class="form-control" value="{{ $city }}" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="area" class="form-label">Area</label>
-                        <select id="area" class="form-select" required>
-                            <option value="">Select Area</option>
-                            @foreach($chinotAreas as $area)
-                                <option value="{{ $area }}">{{ $area }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-danger w-100">Confirm</button>
-                </form>
+    {{-- <div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-3 rounded-4">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold">Select Your Area</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="locationForm">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" id="city" class="form-control" value="{{ $city }}"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="area" class="form-label">Area</label>
+                            <select id="area" class="form-select" required>
+                                <option value="">Select Area</option>
+                                @foreach ($chinotAreas as $area)
+                                    <option value="{{ $area }}">{{ $area }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Confirm</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
-    locationModal.show();
-
-    document.getElementById('locationForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var selectedArea = document.getElementById('area').value;
-        if(!selectedArea) {
-            alert('Please select your area.');
-            return;
-        }
-        // Save to session via AJAX or localStorage
-        fetch("{{ route('location.save') }}", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                city: document.getElementById('city').value,
-                area: selectedArea
-            })
-        }).then(res => res.json())
-          .then(data => {
-              locationModal.hide();
-          });
-    });
-});
-</script>
-
+    </div> --}}
 
     {{-- MODIFIED: PRODUCT MODAL (For Quantity, Sizes, and Add-ons) --}}
     <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
@@ -295,8 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
 
                     <div class="modal-body d-flex flex-column flex-md-row">
-                        <img id="modalImage" class="rounded-4 me-md-3 mb-3"
-                            style="width:200px;height:200px;object-fit:cover;">
+                        <img id="modalImage" class="rounded-4 me-md-3 mb-3" style="height:200px;object-fit:cover;">
 
                         <div class="flex-grow-1">
 
@@ -345,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <span id="modalTotalPriceDisplay" class="fw-bold">Total: Rs. 0/-</span>
+                                <span id="modalTotalPriceDisplay" class="fw-bold badge bg-success">Total: Rs. 0/-</span>
                                 <button type="submit" class="btn btn-custom-primary fw-bold rounded-pill">
                                     Add <span id="modalQtyDisplay">1</span> Item to Cart
                                 </button>
@@ -384,7 +364,6 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
 
@@ -748,5 +727,66 @@ document.addEventListener("DOMContentLoaded", function() {
 
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).on('click', '.wishlist-btn', function(e) {
+            e.preventDefault();
 
+            let btn = $(this);
+            let menuId = btn.data('id');
+
+            $.ajax({
+                url: "{{ route('wishlist.toggle') }}",
+                type: "POST",
+                data: {
+                    menu_id: menuId,
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(response) {
+                    if (response.status === 'added') {
+                        btn.find('i').removeClass('fa-regular').addClass('fa-solid text-danger');
+                    } else if (response.status === 'removed') {
+                        btn.find('i').removeClass('fa-solid text-danger').addClass('fa-regular');
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
+            locationModal.show();
+
+            document.getElementById('locationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                var selectedArea = document.getElementById('area').value;
+                if (!selectedArea) {
+                    alert('Please select your area.');
+                    return;
+                }
+                // Save to session via AJAX or localStorage
+                fetch("{{ route('location.save') }}", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            city: document.getElementById('city').value,
+                            area: selectedArea
+                        })
+                    }).then(res => res.json())
+                    .then(data => {
+                        locationModal.hide();
+                    });
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
