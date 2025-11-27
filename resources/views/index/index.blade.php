@@ -766,8 +766,6 @@
                     alert('Please select your area.');
                     return;
                 }
-                // Save to session via AJAX or localStorage
-                fetch("{{ route('location.save') }}", {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
@@ -780,7 +778,7 @@
                     }).then(res => res.json())
                     .then(data => {
                         locationModal.hide();
-                    });
+                    // });
             });
         });
     </script>
