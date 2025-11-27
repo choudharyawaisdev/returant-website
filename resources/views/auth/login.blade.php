@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Cafe Chinos — Login</title>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -132,26 +131,39 @@
 
                 <div class="form-group">
                     <label class="small font-weight-600">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="name@domain.com" required>
+                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="name@domain.com" required>
+
+                    @error('email')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label class="small font-weight-600">Password</label>
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Enter password" required>
+                        <input id="password" type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
+                            required>
+
                         <div class="input-group-append">
                             <span class="input-group-text" id="togglePwd"><i class="fa fa-eye"></i></span>
                         </div>
                     </div>
+
+                    @error('password')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
+                <!-- Login button -->
                 <button class="btn btn-accent btn-block mb-3" type="submit">Login</button>
 
                 <div class="text-center mt-2">
                     <small class="muted">Don't have an account? <a href="{{ route('register') }}">Register</a></small>
                 </div>
             </form>
+
 
         </div>
 

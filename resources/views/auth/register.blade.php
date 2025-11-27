@@ -134,34 +134,63 @@
 
                 <div class="form-group">
                     <label class="small font-weight-600">Full Name</label>
-                    <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                        placeholder="John Doe" required>
+
+                    @error('name')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
+                <!-- Email -->
                 <div class="form-group">
                     <label class="small font-weight-600">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="name@domain.com" required>
+                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="name@domain.com" required>
+
+                    @error('email')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
                     <label class="small font-weight-600">Password</label>
                     <div class="input-group">
-                        <input id="password" type="password" name="password" class="form-control"
-                            placeholder="Enter password" required>
+                        <input id="password" type="password" name="password"
+                            class="form-control @error('password') is-invalid @enderror" placeholder="Enter password"
+                            required>
+
                         <div class="input-group-append">
-                            <span class="input-group-text" id="togglePwd"><i class="fa fa-eye"></i></span>
+                            <span class="input-group-text" id="togglePwd">
+                                <i class="fa fa-eye"></i>
+                            </span>
                         </div>
                     </div>
+
+                    @error('password')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
+                <!-- Confirm Password -->
                 <div class="form-group">
                     <label class="small font-weight-600">Confirm Password</label>
                     <div class="input-group">
-                        <input id="passwordConfirm" type="password" name="password_confirmation" class="form-control"
+                        <input id="passwordConfirm" type="password" name="password_confirmation"
+                            class="form-control @error('password_confirmation') is-invalid @enderror"
                             placeholder="Confirm password" required>
+
                         <div class="input-group-append">
-                            <span class="input-group-text" id="togglePwd2"><i class="fa fa-eye"></i></span>
+                            <span class="input-group-text" id="togglePwd2">
+                                <i class="fa fa-eye"></i>
+                            </span>
                         </div>
                     </div>
+
+                    @error('password_confirmation')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <button class="btn btn-accent btn-block mb-3" type="submit">Register</button>
