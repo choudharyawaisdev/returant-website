@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/client/order', [PagesController::class, 'index'])->name('client.order');
 });
 
-Route::controller(CartController::class)->middleware('auth')->group(function () {
+Route::controller(CartController::class)->group(function () {
     Route::post('/cart/add', 'addToCart')->name('cart.add');
     Route::delete('/cart/remove/{configKey}', 'removeFromCart')->name('cart.remove');
     Route::post('/cart/update-quantity', 'updateQuantity')->name('cart.updateQuantity');

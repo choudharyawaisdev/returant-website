@@ -105,6 +105,11 @@
             8 => 'Fries',
             9 => 'Drinks',
         ];
+
+        $wishlistMenus = [];
+        if (auth()->check()) {
+            $wishlistMenus = auth()->user()->wishlists()->pluck('menu_id')->toArray();
+        }
     @endphp
 
     {{-- NEW: SINGLE IMAGE SLIDER (Carousel) --}}
@@ -172,15 +177,6 @@
         </div>
     </div>
 
-    {{-- MAIN MENU SECTIONS --}}
-    @php
-        $wishlistMenus = [];
-
-        if (auth()->check()) {
-            $wishlistMenus = auth()->user()->wishlists()->pluck('menu_id')->toArray();
-        }
-    @endphp
-
     @foreach ($categories as $category)
         @if ($category->menus->count())
             <section class="container my-5" id="{{ Str::slug($categoryNames[$category->id] ?? $category->name) }}">
@@ -233,35 +229,6 @@
         @endif
     @endforeach
 
-    <!-- City / Area Modal -->
-    {{-- <div class="modal fade" id="locationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content p-3 rounded-4">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Select Your Area</h5>
-                </div>
-                <div class="modal-body">
-                    <form id="locationForm">
-                        <div class="mb-3">
-                            <label for="city" class="form-label">City</label>
-                            <input type="text" id="city" class="form-control" value="{{ $city }}"
-                                readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="area" class="form-label">Area</label>
-                            <select id="area" class="form-select" required>
-                                <option value="">Select Area</option>
-                                @foreach ($chinotAreas as $area)
-                                    <option value="{{ $area }}">{{ $area }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-danger w-100">Confirm</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> --}}
 
     {{-- MODIFIED: PRODUCT MODAL (For Quantity, Sizes, and Add-ons) --}}
     <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
@@ -276,7 +243,8 @@
                     </div>
 
                     <div class="modal-body d-flex flex-column flex-md-row">
-                        <img id="modalImage" class="rounded-4 me-md-3 mb-3" style="height:200px;object-fit:cover;">
+                        <img id="modalImage" class="rounded-4 me-md-3 mb-3 img-thumbnail"
+                            style="height:200px;object-fit:cover;">
 
                         <div class="flex-grow-1">
 
@@ -754,34 +722,4 @@
             });
         });
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
-            locationModal.show();
-
-            document.getElementById('locationForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                var selectedArea = document.getElementById('area').value;
-                if (!selectedArea) {
-                    alert('Please select your area.');
-                    return;
-                }
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            city: document.getElementById('city').value,
-                            area: selectedArea
-                        })
-                    }).then(res => res.json())
-                    .then(data => {
-                        locationModal.hide();
-                    // });
-            });
-        });
-    </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
