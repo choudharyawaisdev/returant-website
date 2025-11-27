@@ -10,6 +10,7 @@
     <link href="{{ asset('assets/css/frontend.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap4.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Intel+One+Mono:ital,wght@0,300..700;1,300..700&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
@@ -100,5 +101,20 @@
     <div id="responsive-overlay"></div>
     @include('includes.script')
 </body>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 
+<!-- Popper.js (required for Bootstrap 4 tooltips & dropdowns) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+
+<!-- Bootstrap 4 JS -->
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap4.js"></script>
+
+<script>
+    new DataTable('#example');
+</script>
 </html>

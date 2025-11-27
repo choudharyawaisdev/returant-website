@@ -79,7 +79,7 @@
         <h1 class="section-title mb-4 fw-bold" style="color:#A9262B;">My Orders</h1>
         @if ($orders->count())
             <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
+                <table id="example" class="table table-striped table-hover align-middle">
                     <thead>
                         <tr>
                             <th>#</th>
