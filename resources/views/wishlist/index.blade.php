@@ -49,7 +49,6 @@
         font-size: 2rem;
         font-weight: 700;
         color: #1A1A1A;
-        text-align: center;
         margin-bottom: 2rem;
     }
 
@@ -61,7 +60,7 @@
 </style>
 
 <div class="container my-5">
-    <h2 class="section-title">My Wishlist</h2>
+    <h2 class="section-title mb-4 fw-bold" style="color:#A9262B;">My Wishlist</h2>
 
     <div class="row g-4">
         @forelse ($wishlists as $wishlist)
@@ -89,7 +88,7 @@
                 </div>
             @endif
         @empty
-            <div class="col-12 text-center py-5">
+            <div class="col-12 text-center py-1 rounded" style="background: #cff4fc">
                 <p class="text-muted fs-5">Your wishlist is empty.</p>
             </div>
         @endforelse

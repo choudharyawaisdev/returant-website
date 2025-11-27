@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Café Chinos - Orders')
 @section('body')
-
     <style>
         /* Table general styling */
         .table thead {
@@ -76,10 +75,8 @@
             }
         }
     </style>
-
     <div class="container my-5">
-        <h2 class="section-title mb-4" style="color:#A9262B;">My Orders</h2>
-
+        <h1 class="section-title mb-4 fw-bold" style="color:#A9262B;">My Orders</h1>
         @if ($orders->count())
             <div class="table-responsive">
                 <table class="table table-striped table-hover align-middle">
@@ -156,9 +153,8 @@
             </div>
         @else
             <div class="alert alert-info text-center">
-                You have no orders yet.
+                Your wishlist is empty.
             </div>
         @endif
     </div>
-
 @endsection
