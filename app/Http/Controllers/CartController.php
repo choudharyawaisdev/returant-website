@@ -162,70 +162,69 @@ class CartController extends Controller
     /**
      * Place the order and store it in the database.
      */
-    public function placeOrder(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'mobile_number' => 'required|string|max:15',
-            'email' => 'nullable|email|max:255',
-            'address' => 'required|string|max:500',
-            'special_instructions' => 'nullable|string|max:1000',
-            'subtotal' => 'required|numeric',
-            'delivery_fee' => 'required|numeric',
-            'total_amount' => 'required|numeric',
-            'payment_method' => 'required|in:COD',
-        ]);
-        
-        $cart = session()->get('cart', []);
-        if (empty($cart)) {
-            return redirect()->route('menu')->with('error', 'Your cart session expired. Please refill your cart.');
-        }
-
-        $actualSubtotal = collect($cart)->sum(fn($item) => ($item['price'] ?? 0) * ($item['quantity'] ?? 0));
-        $deliveryFee = 150;
-        $actualTotal = $actualSubtotal + $deliveryFee;
-
-        if ($request->total_amount != $actualTotal) {
-            \Log::warning("Price mismatch for order placed by: {$request->name}. Frontend total: {$request->total_amount}, Actual total: {$actualTotal}");
-        }
-
-        DB::beginTransaction();
-
-        $order = Order::create([
-            'customer_name' => $request->name,
-            'mobile_number' => $request->mobile_number,
-            'email' => $request->email,
-            'delivery_address' => $request->address,
-            'special_instructions' => $request->special_instructions,
-            'subtotal' => $actualSubtotal,
-            'delivery_fee' => $deliveryFee,
-            'total_amount' => $actualTotal,
-            'payment_method' => $request->payment_method,
-            'status' => 'Pending',
-            'user_id' => auth()->id() ?? null,
-        ]);
-
-        foreach ($cart as $item) {
-            $addons = isset($item['add_ons']) && is_string($item['add_ons']) 
-                ? json_decode($item['add_ons'], true) 
-                : ($item['add_ons'] ?? []);
-
-            OrderItem::create([
-                'order_id' => $order->id,
-                // 'menu_id' => $item['id'],
-                'title' => $item['title'],
-                'quantity' => $item['quantity'],
-                'unit_price' => $item['price'] ?? 0,
-                'total_price' => ($item['price'] ?? 0) * ($item['quantity'] ?? 0),
-                'size_name' => $item['size_name'] ?? null,
-                'add_ons_details' => json_encode($addons),
-            ]);
-        }
-
-        session()->forget('cart');
-
-        DB::commit();
-
-        return redirect()->route('order.success')->with('success', 'Your order (#' . $order->id . ') has been placed successfully!');
+public function placeOrder(Request $request)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'mobile_number' => 'required|string|max:15',
+        'email' => 'nullable|email|max:255',
+        'delivery_address' => 'required|string|max:500',
+        'special_instructions' => 'nullable|string|max:1000',
+        'subtotal' => 'required|numeric',
+        'delivery_fee' => 'required|numeric',
+        'total_amount' => 'required|numeric',
+        'payment_method' => 'required|in:COD',
+    ]);
+    
+    $cart = session()->get('cart', []);
+    if (empty($cart)) {
+        return redirect()->route('menu')->with('error', 'Your cart session expired. Please refill your cart.');
     }
+
+    $actualSubtotal = collect($cart)->sum(fn($item) => ($item['price'] ?? 0) * ($item['quantity'] ?? 0));
+    $deliveryFee = 150;
+    $actualTotal = $actualSubtotal + $deliveryFee;
+
+    if ($request->total_amount != $actualTotal) {
+        \Log::warning("Price mismatch for order placed by: {$request->name}. Frontend total: {$request->total_amount}, Actual total: {$actualTotal}");
+    }
+
+    DB::beginTransaction();
+
+    $order = Order::create([
+        'customer_name' => $request->name,
+        'mobile_number' => $request->mobile_number,
+        'email' => $request->email,
+        'delivery_address' => $request->delivery_address,
+        'special_instructions' => $request->special_instructions,
+        'subtotal' => $actualSubtotal,
+        'delivery_fee' => $deliveryFee,
+        'total_amount' => $actualTotal,
+        'payment_method' => $request->payment_method,
+        'status' => 'Pending',
+        'user_id' => auth()->id() ?? null,
+    ]);
+
+    foreach ($cart as $item) {
+        $addons = isset($item['add_ons']) && is_string($item['add_ons'])
+            ? json_decode($item['add_ons'], true)
+            : ($item['add_ons'] ?? []);
+
+        OrderItem::create([
+            'order_id' => $order->id,
+            'title' => $item['title'],
+            'quantity' => $item['quantity'],
+            'unit_price' => $item['price'] ?? 0,
+            'total_price' => ($item['price'] ?? 0) * ($item['quantity'] ?? 0),
+            'size_name' => $item['size_name'] ?? null,
+            'add_ons_details' => json_encode($addons),
+        ]);
+    }
+
+    session()->forget('cart');
+
+    DB::commit();
+
+    return redirect()->route('order.success')->with('success', 'Your order (#' . $order->id . ') has been placed successfully!');
+}
 }

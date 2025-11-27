@@ -1,105 +1,103 @@
 @extends('layouts.app')
 @section('title', 'Checkout')
-
-<style>
-    :root {
-        --primary-color: #ff6f00;
-        --secondary-color: #ffd54f;
-        --success-green: #28a745;
-        --light-bg: #f9f9f9;
-        --dark-text: #222;
-        --border-color: #ddd;
-    }
-
-    body {
-        background-color: var(--light-bg);
-        color: var(--dark-text);
-    }
-
-    .btn-custom-primary {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-        color: white;
-        font-weight: bold;
-        transition: all 0.2s;
-        border-radius: 8px;
-    }
-
-    .btn-custom-primary:hover {
-        background-color: #e25f00;
-        border-color: #e25f00;
-    }
-
-    .btn-outline-success {
-        color: var(--success-green);
-        border-color: var(--success-green);
-    }
-
-    .btn-outline-success:hover {
-        background-color: var(--success-green);
-        color: white;
-    }
-
-    .summary-card {
-        background-color: #fff;
-        border-radius: 12px;
-        padding: 30px;
-        border: 1px solid var(--border-color);
-    }
-
-    .checkout-title {
-        color: var(--primary-color);
-        font-weight: 800;
-        margin-bottom: 25px;
-    }
-
-    .form-control:focus {
-        border-color: var(--primary-color);
-        box-shadow: 0 0 0 0.25rem rgba(255, 111, 0, 0.25);
-    }
-
-    .form-check-input:checked {
-        background-color: var(--success-green);
-        border-color: var(--success-green);
-    }
-
-    .list-group-item {
-        border-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .modal-title {
-        color: var(--primary-color);
-    }
-
-    .btn-outline-primary {
-        color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-    .btn-outline-primary:hover {
-        background-color: var(--primary-color);
-        color: white;
-    }
-
-    #useLocationBtn {
-        background-color: var(--success-green);
-        border-color: var(--success-green);
-        color: white;
-    }
-
-    #useLocationBtn:hover {
-        background-color: #1e7e34;
-        border-color: #1e7e34;
-    }
-
-    .total-row {
-        background-color: #fff3e0;
-        /* Light orange background for emphasis */
-        border-top: 2px solid var(--primary-color);
-    }
-</style>
-
 @section('body')
+    <style>
+        :root {
+            --primary-color: #ff6f00;
+            --secondary-color: #ffd54f;
+            --success-green: #28a745;
+            --light-bg: #f9f9f9;
+            --dark-text: #222;
+            --border-color: #ddd;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+        }
+
+        .btn-custom-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            transition: all 0.2s;
+            border-radius: 8px;
+        }
+
+        .btn-custom-primary:hover {
+            background-color: #e25f00;
+            border-color: #e25f00;
+        }
+
+        .btn-outline-success {
+            color: var(--success-green);
+            border-color: var(--success-green);
+        }
+
+        .btn-outline-success:hover {
+            background-color: var(--success-green);
+            color: white;
+        }
+
+        .summary-card {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .checkout-title {
+            color: var(--primary-color);
+            font-weight: 800;
+            margin-bottom: 25px;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(255, 111, 0, 0.25);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--success-green);
+            border-color: var(--success-green);
+        }
+
+        .list-group-item {
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .modal-title {
+            color: var(--primary-color);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #useLocationBtn {
+            background-color: var(--success-green);
+            border-color: var(--success-green);
+            color: white;
+        }
+
+        #useLocationBtn:hover {
+            background-color: #1e7e34;
+            border-color: #1e7e34;
+        }
+
+        .total-row {
+            background-color: #fff3e0;
+            /* Light orange background for emphasis */
+            border-top: 2px solid var(--primary-color);
+        }
+    </style>
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
@@ -146,11 +144,10 @@
 
                     <div class="mb-4 bg-light p-3" style="border-radius:10px;">
                         <p class="mb-3 fw-bold">Add Adress Area/House</p>
-                        {{-- Address textarea with new placeholder --}}
-                        <textarea name="address" class="form-control" rows="4"
-                            placeholder="Enter your street address, house/apartment number, and area/sector here." required>{{ old('address') }}</textarea>
-                        {{-- Added error display for 'address' field (assuming a 'name' of 'address' for the input) --}}
-                        @error('address')
+                        <textarea name="delivery_address" class="form-control" rows="4"
+                            placeholder="Enter your street address, house/apartment number, and area/sector here." required>{{ old('delivery_address') }}</textarea>
+
+                        @error('delivery_address')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
@@ -168,6 +165,8 @@
                                     style="color: var(--success-green); font-size: 1.5rem;"></i>
                                 <span class="fw-bold ">Cash on Delivery (COD)</span>
                             </label>
+                            {{-- FIX: Add a hidden input to submit the payment_method value --}}
+                            <input type="hidden" name="payment_method" value="COD">
                         </div>
                         @error('payment_method')
                             <div class="text-danger small">{{ $message }}</div>
@@ -249,7 +248,4 @@
             </div>
         </div>
     </div>
-
-
-
 @endsection
