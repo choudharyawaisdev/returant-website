@@ -727,7 +727,6 @@
 
         });
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).on('click', '.wishlist-btn', function(e) {
             e.preventDefault();
@@ -755,8 +754,6 @@
             });
         });
     </script>
-
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var locationModal = new bootstrap.Modal(document.getElementById('locationModal'));
@@ -787,6 +784,6 @@
             });
         });
     </script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
