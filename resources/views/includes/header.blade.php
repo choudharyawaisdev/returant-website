@@ -1,5 +1,4 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 <style>
     :root {
         --primary-color: #A9262B;
@@ -45,7 +44,7 @@
         background-color: var(--primary-color);
         transform: scaleX(1);
     }
-    
+
     /* --- Z-index and Sticky Classes --- */
 
     /* Z-index for sticky elements */
@@ -69,12 +68,13 @@
         padding-bottom: 10px;
         color: #333 !important;
     }
-    
+
     /* Set active color for offcanvas links */
     .offcanvas-body .nav-link.active {
         font-weight: bold;
         color: var(--primary-color) !important;
-        background-color: #f8f9fa; /* Light background for highlight */
+        background-color: #f8f9fa;
+        /* Light background for highlight */
         border-radius: 8px;
     }
 
@@ -100,51 +100,123 @@
         color: #000;
     }
 </style>
+<style>
+    /* Avatar */
+    .user-avatar {
+        width: 42px;
+        height: 42px;
+        object-fit: cover;
+        border: 2px solid #fff;
+        transition: 0.2s ease-in-out;
+    }
 
+    .user-avatar:hover {
+        transform: scale(1.05);
+    }
+
+    /* Dropdown Menu */
+    .user-dropdown {
+        border-radius: 12px;
+        padding: 6px 0;
+        border: none;
+        background: #ffffff;
+        min-width: 200px;
+    }
+
+    /* Dropdown Items */
+    .user-dropdown-item {
+        font-size: 14px;
+        padding: 10px 18px;
+        border-radius: 8px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .user-dropdown-item:hover {
+        background: #f4f4f4;
+        color: #a9262b;
+    }
+
+    /* Divider Styling */
+    .dropdown-divider {
+        margin: 6px 0;
+        border-color: #e6e6e6;
+    }
+
+    /* Dark mode hover or Primary hover? */
+    .user-dropdown-item.text-danger:hover {
+        background: #ffeaea;
+    }
+</style>
 {{-- TOP BAR (Logo and Cart) - STICKY --}}
 <div class="top-bar py-3 sticky-top">
-    <div class="container d-flex justify-content-between align-items-center" >
+    <div class="container d-flex justify-content-between align-items-center">
         <a class="navbar-brand fw-bold fs-3" href="#">
             <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" width="120px" style="border-radius: 10px">
         </a>
-
-        <div class="d-flex align-items-center gap-3">
+        @guest
             <button class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 d-none d-lg-block">
                 Register Now
             </button>
+        @endguest
+        <div class="d-flex align-items-center gap-3">
+            @auth
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center user-dropdown-toggle" id="userDropdown"
+                        data-bs-toggle="dropdown">
+                        <img src="{{ asset('assets/images/user.png') }}" class="rounded-circle shadow-sm user-avatar"
+                            alt="User">
+                    </a>
 
-            {{-- Cart Button to open Offcanvas --}}
-            <button id="cartButton" class="btn position-relative bg-dark shadow-sm rounded-circle"
-                style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
-                aria-controls="cartOffcanvas">
-                <i class="fa-solid fa-cart-shopping text-white"></i>
-                <span id="cartBadge"
-                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-            </button>
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow-lg" aria-labelledby="userDropdown">
+
+                        <li class="px-3 py-2 text-center">
+                            <span class="fw-bold text-dark" style="font-size: 14px;">{{ Auth::user()->name }}</span>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item user-dropdown-item" href="{{ route('wishlist.index') }}">
+                                <i class="fa-regular fa-heart me-2 text-danger"></i> My Wishlist
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item user-dropdown-item" href="{{ route('client.order') }}">
+                                <i class="fa-solid fa-bag-shopping me-2 text-primary"></i> My Orders
+                            </a>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item user-dropdown-item text-danger fw-bold" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
+
+                    </ul>
+                </div>
+            @endauth
+            @if (!request()->routeIs('wishlist.index') && !request()->routeIs('client.order'))
+                <button id="cartButton" class="btn position-relative bg-dark shadow-sm rounded-circle"
+                    style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
+                    aria-controls="cartOffcanvas">
+                    <i class="fa-solid fa-cart-shopping text-white"></i>
+                    <span id="cartBadge"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                </button>
+            @endif
         </div>
-    </div>
-</div>
-
-
-{{-- OFFCANVAS (Mobile Menu) --}}
-<div class="offcanvas offcanvas-start bg-light" tabindex="-1" id="offcanvasNavbar"
-    aria-labelledby="offcanvasNavbarLabel">
-    <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title fw-bold" id="offcanvasNavbarLabel">Menu Categories</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-
-    <div class="offcanvas-body">
-        <ul class="navbar-nav fw-medium text-uppercase">
-            <li class="nav-item"><a class="nav-link" href="#platter">Platter</a></li>
-            <li class="nav-item"><a class="nav-link" href="#wings">Wings</a></li>
-            <li class="nav-item"><a class="nav-link" href="#burger">Burger</a></li>
-            <li class="nav-item"><a class="nav-link" href="#pasta">Pasta</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sandwich">Sandwich</a></li>
-            <li class="nav-item"><a class="nav-link" href="#rolls">Rolls</a></li>
-            <li class="nav-item"><a class="nav-link" href="#nuggets-shots">Nuggets & Shots</a></li>
-            <li class="nav-item"><a class="nav-link" href="#fries">Fries</a></li>
-            <li class="nav-item"><a class="nav-link" href="#drinks">Drinks</a></li>
-        </ul>
     </div>
 </div>

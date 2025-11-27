@@ -136,29 +136,23 @@
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-12">
-                            <div class="mb-2 p-3 bg-white border rounded">
-                                <p class="my-0 text-muted">
-                                    <i class="fas fa-map-marker-alt me-2"></i>
-                                    Delivery Address: <span id="displayAddress"
-                                        class="fw-bold text-dark">{{ old('address', 'Please select or enter an address') }}</span>
-                                </p>
-                            </div>
-                            <button type="button" class="btn btn-outline-primary py-2 fw-bold" data-bs-toggle="modal"
-                                data-bs-target="#addressModal">
-                                <i class="fas fa-map-marker-alt me-2"></i> Add / Change Address
-                            </button>
-                            <input type="hidden" name="address" id="addressInput" value="{{ old('address') }}" required>
-                            @error('address')
-                                <div class="text-danger small mt-2">{{ $message }}</div>
-                            @enderror
-                        </div>
                     </div>
 
                     <div class="mb-4 bg-light p-3" style="border-radius:10px;">
                         <p class="mb-3 fw-bold">Special Instructions (Optional)</p>
                         <textarea name="special_instructions" class="form-control" rows="4"
                             placeholder="E.g. Leave at the gate, call upon arrival, or any specific instructions">{{ old('special_instructions') }}</textarea>
+                    </div>
+
+                    <div class="mb-4 bg-light p-3" style="border-radius:10px;">
+                        <p class="mb-3 fw-bold">Add Adress Area/House</p>
+                        {{-- Address textarea with new placeholder --}}
+                        <textarea name="address" class="form-control" rows="4"
+                            placeholder="Enter your street address, house/apartment number, and area/sector here." required>{{ old('address') }}</textarea>
+                        {{-- Added error display for 'address' field (assuming a 'name' of 'address' for the input) --}}
+                        @error('address')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     {{-- Hidden inputs for financial data (Backend MUST re-calculate this for security) --}}
@@ -169,25 +163,27 @@
                     <div class="mb-4 bg-light p-3" style="border-radius:10px">
                         <p class="mb-3 fw-bold">Payment Method</p>
                         <div class="form-check cod-option p-3 border rounded">
-
                             <label class="form-check-label d-flex align-items-center" for="cod">
                                 <i class="fas fa-money-bill-wave me-2"
                                     style="color: var(--success-green); font-size: 1.5rem;"></i>
                                 <span class="fw-bold ">Cash on Delivery (COD)</span>
                             </label>
                         </div>
+                        @error('payment_method')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
                     </div>
                 </form>
             </div>
 
-            <div class="col-lg-4 order-lg-last">
-                <div class="summary-card shadow">
+            <div class="col-lg-4 order-lg-last bg-light " style="border-radius:10px">
+                <div class="summary-card shadow mt-3">
                     <h4 class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                         <span class="text-dark fw-bold"><i class="fas fa-shopping-cart me-2"
                                 style="color: var(--primary-color);"></i> Your Order</span>
                     </h4>
 
-                    <ul class="list-group mb-3">
+                    <ul class="list-group">
                         {{-- LOOPING OVER $cartItems (fixed the undefined variable error) --}}
                         @foreach ($cartItems as $item)
                             <li class="list-group-item d-flex justify-content-between lh-sm">
@@ -245,7 +241,8 @@
                     </ul>
 
                     {{-- The button submits the main form using its ID --}}
-                    <button type="submit" form="checkoutForm" class="btn btn-lg w-100 mt-3 text-white" style="background-color: #a9262b">
+                    <button type="submit" form="checkoutForm" class="btn btn-lg w-100 mt-3 text-white"
+                        style="background-color: #a9262b">
                         <i class="fas fa-motorcycle me-2"></i> Place Order Now
                     </button>
                 </div>
@@ -253,104 +250,6 @@
         </div>
     </div>
 
-    {{-- Address Modal --}}
-    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="addressModalLabel">Enter Delivery Address</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <button type="button" class="btn w-100 mb-3" id="useLocationBtn">
-                            <i class="fas fa-crosshairs me-2"></i> Use Current Location
-                        </button>
-                    </div>
 
-                    <h6 class="text-muted text-center my-3">OR Enter Manually</h6>
 
-                    <div class="mb-3">
-                        <label for="modalAddress" class="form-label">Street Address / House Number</label>
-                        <textarea class="form-control" id="modalAddress" rows="3" placeholder="Enter your complete street address">{{ old('address') }}</textarea>
-                    </div>
-
-                    {{-- ADDED MISSING REGION FIELD --}}
-                    <div class="mb-3">
-                        <label for="modal-region" class="form-label">Region/City</label>
-                        <select class="form-select" id="modal-region" required>
-                            <option selected value="">Select Region...</option>
-                            <option value="Lahore">Lahore</option>
-                            <option value="Karachi">Karachi</option>
-                            <option value="Islamabad">Islamabad</option>
-                            <option value="Faisalabad">Faisalabad</option>
-                            <option value="Rawalpindi">Rawalpindi</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-custom-primary" id="saveAddressBtn" data-bs-dismiss="modal">
-                        Save and Use Address
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Function to update the visible and hidden address fields
-            function updateAddress(fullAddress) {
-                document.getElementById('addressInput').value = fullAddress.trim();
-                document.getElementById('displayAddress').textContent = fullAddress.trim() ||
-                    'Please select or enter an address';
-            }
-
-            // Initialize display address from old value if available
-            updateAddress(document.getElementById('addressInput').value);
-
-            // Save address from modal to hidden input
-            document.getElementById('saveAddressBtn').addEventListener('click', function() {
-                const address = document.getElementById('modalAddress').value.trim();
-                const region = document.getElementById('modal-region').value.trim();
-
-                let fullAddress = address;
-                if (region && region !== 'Select Region...') {
-                    fullAddress = `${address}, ${region}`;
-                }
-
-                if (address) {
-                    updateAddress(fullAddress);
-                } else {
-                    alert('Please enter a street address.');
-                }
-            });
-
-            // Use current location (Geolocation)
-            document.getElementById('useLocationBtn').addEventListener('click', function() {
-                document.getElementById('modalAddress').value = 'Locating...';
-
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        const lat = position.coords.latitude;
-                        const lon = position.coords.longitude;
-
-                        // NOTE: In a real app, you MUST call a Geocoding API here
-                        document.getElementById('modalAddress').value =
-                            `Address near Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}. (Refine Manually)`;
-                        alert(
-                            'Location retrieved. Please refine the street address and select the region.'
-                            );
-                    }, function(error) {
-                        document.getElementById('modalAddress').value = '';
-                        alert('Unable to retrieve your location: ' + error.message);
-                    });
-                } else {
-                    document.getElementById('modalAddress').value = '';
-                    alert('Geolocation is not supported by your browser.');
-                }
-            });
-        });
-    </script>
 @endsection
