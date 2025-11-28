@@ -20,7 +20,7 @@
             <ul class="main-menu">
                 <!-- Dashboard -->
                 <li class="slide">
-                    <a href="{{ url('admin.dashboard') }}" class="side-menu__item">
+                    <a href="{{ url('admin/dashboard') }}" class="side-menu__item">
                         <i class="fa-solid fa-house side-menu__icon text-sm"></i>
                         <span class="side-menu__label">Dashboard</span>
                     </a>
@@ -36,7 +36,7 @@
 
                 <!-- Add Ons -->
                 <li class="slide mt-2">
-                    <a href="{{ url('addons/index') }}" class="side-menu__item">
+                    <a href="{{ url('admin/addons') }}" class="side-menu__item">
                         <i class="fa-solid fa-burger side-menu__icon"></i>
                         <span class="side-menu__label">Add Ons</span>
                     </a>
