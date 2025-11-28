@@ -209,7 +209,7 @@
                     </ul>
                 </div>
             @endauth
-            @if (!request()->routeIs('wishlist.index') && !request()->routeIs('client.order'))
+            @if (!request()->routeIs('wishlist.index') && !request()->routeIs('client.order') && !request()->routeIs('checkout.index')) 
                 <button id="cartButton" class="btn position-relative bg-dark shadow-sm rounded-circle"
                     style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
                     aria-controls="cartOffcanvas">
