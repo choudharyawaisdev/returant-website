@@ -8,6 +8,7 @@ use App\Http\Controllers\AddUserController;
 use App\Http\Controllers\AdonsController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\LocationController;
 
@@ -17,6 +18,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('addons', AdonsController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('adduser', AddUserController::class);
+    Route::get('/orders', [AdminController::class, 'orderindex'])->name('admin.orders.index');
+
 });
 
 Route::middleware('auth')->group(function () {
