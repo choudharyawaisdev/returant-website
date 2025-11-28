@@ -39,7 +39,7 @@ Route::controller(MenuController::class)->group(function () {
     Route::get('/menu/{menu}', 'show')->name('menu.show');     // Single menu view
     Route::get('/menu/search', 'search')->name('menu.search'); // Search menu
 });
-Route::get('/clients', [ClientController::class, 'index'])->name('index.index');
+Route::get('/', [ClientController::class, 'index'])->name('index.index');
 Route::get('/location', [LocationController::class, 'show'])->name('location.show');
 Route::post('/location', [LocationController::class, 'store'])->name('location.store');
 
@@ -57,9 +57,9 @@ Route::get('/order/success', function () {
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return redirect()->route('index.index');
+// });
 
 Route::middleware([
     'auth:sanctum',
