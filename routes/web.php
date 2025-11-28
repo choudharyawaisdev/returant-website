@@ -19,6 +19,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('adduser', AddUserController::class);
     Route::get('/orders', [AdminController::class, 'orderindex'])->name('admin.orders.index');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.orders.dashboard');
 
 });
 
