@@ -128,12 +128,6 @@
     {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
     <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top py-2">
         <div class="container position-relative">
-
-            {{-- Left Scroll Button --}}
-            <button id="scrollLeft" class="btn position-absolute start-0 top-50 translate-middle-y shadow-sm text-white"
-                style="z-index: 10; background-color: #dc3545;"> <i class="fas fa-chevron-left"></i>
-            </button>
-
             {{-- Scrollable Menu Wrapper --}}
             <div class="overflow-hidden" style="margin: 0 50px;">
                 <ul id="categoryMenu" class="navbar-nav d-flex flex-row gap-3 text-uppercase fw-medium"
@@ -151,11 +145,6 @@
                     <li class="nav-item"><a class="nav-link" href="#deals">Deals</a></li>
                 </ul>
             </div>
-
-            {{-- Right Scroll Button --}}
-            <button id="scrollRight" class="btn position-absolute end-0 top-50 translate-middle-y shadow-sm text-white"
-                style="z-index: 10; background-color: #dc3545;"> <i class="fas fa-chevron-right"></i>
-            </button>
         </div>
     </nav>
 
@@ -722,4 +711,5 @@
             });
         });
     </script>
+
 @endsection

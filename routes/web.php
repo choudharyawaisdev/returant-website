@@ -19,11 +19,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('adduser', AddUserController::class);
 });
 
-// Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::post('/client/wishlist/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
     Route::get('/client/wishlist', [WishlistController::class, 'menu'])->name('wishlist.index');
     Route::get('/client/order', [PagesController::class, 'index'])->name('client.order');
-// });
+});
 
 Route::controller(CartController::class)->group(function () {
     Route::post('/cart/add', 'addToCart')->name('cart.add');
