@@ -92,6 +92,21 @@
             width: 100%;
             left: 0;
         }
+
+        #categoryNav {
+            position: relative;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #categoryNav.sticky {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            background: white;
+        }
     </style>
     @php
         $categoryNames = [
@@ -126,7 +141,8 @@
     </div>
 
     {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm main-navbar sticky-top py-2">
+    <nav id="categoryNav" class="navbar navbar-expand-lg bg-white shadow-sm main-navbar py-4">
+
         <div class="container position-relative">
             {{-- Scrollable Menu Wrapper --}}
             <div class="overflow-hidden" style="margin: 0 50px;">
@@ -711,5 +727,16 @@
             });
         });
     </script>
+    <script>
+        window.addEventListener("scroll", function() {
+            let nav = document.getElementById("categoryNav");
+            let topBarHeight = 60; // Change based on your top bar height
 
+            if (window.scrollY > topBarHeight) {
+                nav.classList.add("sticky");
+            } else {
+                nav.classList.remove("sticky");
+            }
+        });
+    </script>
 @endsection

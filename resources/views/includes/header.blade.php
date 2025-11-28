@@ -153,13 +153,14 @@
         <a class="navbar-brand fw-bold fs-3" href="#">
             <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" width="120px" style="border-radius: 10px">
         </a>
-        @guest
-            <button class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 d-none d-lg-block">
-                Register Now
-            </button>
-        @endguest
         <div class="d-flex align-items-center gap-3">
+            @guest
+                <a href="/login" class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 d-none d-lg-block">
+                    Register Now
+                </a>
+            @endguest
             @auth
+
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center user-dropdown-toggle" id="userDropdown"
                         data-bs-toggle="dropdown">

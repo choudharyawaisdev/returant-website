@@ -47,28 +47,31 @@
             <div class="container p-4 pb-0">
                 <section>
                     <div class="row">
-                        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                            <h6 class="text-uppercase mb-4 fw-bold">Company Name</h6>
+                        <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mt-6">
+                            <h6 class="text-uppercase mb-4 fw-bold">Chinos Café</h6>
                             <p>
-                                Here you can use rows and columns to organize your footer content.
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                                Welcome to Chinos Café — where great taste meets perfect ambiance.
+                                We serve fresh platters, burgers, pasta, wings, pizza, and signature drinks
+                                made with quality ingredients and authentic flavors.
+                                Your comfort and satisfaction are our priority.
                             </p>
                         </div>
 
-                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
+
+                        {{-- <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mt-6">
                             <h6 class="text-uppercase mb-4 fw-bold">Useful Links</h6>
                             <p><a class="text-dark">Your Account</a></p>
                             <p><a class="text-dark">Become an Affiliate</a></p>
                             <p><a class="text-dark">Shipping Rates</a></p>
                             <p><a class="text-dark">Help</a></p>
-                        </div>
+                        </div> --}}
 
-                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                        <div class="col-md-4 col-lg-6 col-xl-6 mx-auto mt-6">
                             <h6 class="text-uppercase mb-4 fw-bold">Contact</h6>
-                            <p><i class="fas fa-home me-2"></i> New York, NY 10012, US</p>
-                            <p><i class="fas fa-envelope me-2"></i> info@gmail.com</p>
-                            <p><i class="fas fa-phone me-2"></i> +01 234 567 88</p>
-                            <p><i class="fas fa-print me-2"></i> +01 234 567 89</p>
+                            <p><i class="fas fa-home me-2"></i> Chinot Sargodha Road</p>
+                            <p><i class="fas fa-envelope me-2"></i> cafechinosofficial@gmail.com</p>
+                            <p><i class="fas fa-phone me-2"></i>+92 3197793578</p>
+                            <p><i class="fas fa-print me-2"></i>+92 3117593578</p>
                         </div>
                     </div>
                 </section>
@@ -87,12 +90,12 @@
 
                         </div>
 
-                        <div class="col-md-5 col-lg-4 text-center text-md-end">
+                        {{-- <div class="col-md-5 col-lg-4 text-center text-md-end">
                             <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-facebook-f"></i></a>
                             <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-google"></i></a>
                             <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-instagram"></i></a>
-                        </div>
+                        </div> --}}
                     </div>
                 </section>
             </div>
@@ -117,4 +120,5 @@
 <script>
     new DataTable('#example');
 </script>
+
 </html>
