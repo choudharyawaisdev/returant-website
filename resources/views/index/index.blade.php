@@ -225,7 +225,8 @@
                                         <div class="position-absolute top-0 end-0 m-2">
                                             <button class="btn btn-light rounded-circle shadow wishlist-btn"
                                                 data-id="{{ $menu->id }}">
-                                                <i class="fa-regular fa-heart fs-5"></i> <!-- outline heart -->
+                                                <i
+                                                    class="{{ in_array($menu->id, $wishlistIds ?? []) ? 'fa-solid fa-heart fs-5 text-danger' : 'fa-regular fa-heart fs-5' }}"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -720,13 +721,18 @@
                 },
                 success: function(response) {
                     if (response.status === 'added') {
-                        btn.find('i').removeClass('fa-regular').addClass('fa-solid text-danger');
+                        btn.find('i').removeClass('fa-regular')
+                            .addClass('fa-solid text-danger');
                     } else if (response.status === 'removed') {
-                        btn.find('i').removeClass('fa-solid text-danger').addClass('fa-regular');
+                        btn.find('i').removeClass('fa-solid text-danger')
+                            .addClass('fa-regular');
                     }
                 },
                 error: function(xhr) {
-                    console.log(xhr.responseText);
+                    if (xhr.status === 401) {
+                        alert("Please login to use wishlist.");
+                        window.location.href = "/login";
+                    }
                 }
             });
         });

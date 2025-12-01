@@ -38,6 +38,8 @@ Route::controller(CartController::class)->group(function () {
     Route::get('/checkout', 'index')->name('checkout.index'); // Checkout page
     Route::post('/order', 'placeOrder')->name('order.place'); // Place order
 });
+Route::post('/wishlist-toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
+Route::get('/wishlist', [WishlistController::class, 'menu'])->name('wishlist.index');
 
 Route::controller(MenuController::class)->group(function () {
     Route::get('/menu/{menu}', 'show')->name('menu.show');     // Single menu view
