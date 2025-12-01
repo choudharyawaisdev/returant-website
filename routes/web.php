@@ -13,7 +13,7 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\LocationController;
 
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('menus', MenuController::class);
     Route::resource('addons', AdonsController::class);
     Route::resource('categories', CategoryController::class);
