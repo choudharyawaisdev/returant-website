@@ -249,7 +249,7 @@
 
                     <div class="modal-body d-flex flex-column flex-md-row">
                         <img id="modalImage" class="rounded-4 me-md-3 mb-3 img-thumbnail"
-                            style="height:200px; width:200px; object-fit:cover;">
+                            style="height:200px; width:200px object-fit:cover;">
 
                         <div class="flex-grow-1">
 
