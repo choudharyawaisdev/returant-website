@@ -210,10 +210,10 @@
                 </div>
             @endauth
             @if (!request()->routeIs('wishlist.index') && !request()->routeIs('client.order') && !request()->routeIs('checkout.index')) 
-                <button id="cartButton" class="btn position-relative bg-dark shadow-sm rounded-circle"
+                <button id="cartButton" class="btn position-relative bg-light shadow-sm rounded-circle"
                     style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
                     aria-controls="cartOffcanvas">
-                    <i class="fa-solid fa-cart-shopping text-white"></i>
+                    <i class="fa-solid fa-cart-shopping text-dark"></i>
                     <span id="cartBadge"
                         class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
                 </button>
