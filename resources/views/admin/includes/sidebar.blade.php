@@ -2,7 +2,7 @@
 <aside class="app-sidebar sticky" id="sidebar">
     <div class="main-sidebar-header">
         <a href="" class="header-logo text-center">
-            <img src="assets/images/logo getwelll.png" alt="Get Well">
+            <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="Get Well" width="90px">
         </a>
     </div>
 

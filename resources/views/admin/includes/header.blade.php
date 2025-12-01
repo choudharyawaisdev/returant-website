@@ -4,12 +4,12 @@
             <div class="header-element">
                 <div class="horizontal-logo">
                     <a href="index.html" class="header-logo">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="desktop-logo">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="toggle-logo">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="desktop-dark">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="toggle-dark">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="desktop-white">
-                        <img src="{{ asset('assets/images/profile.png') }}" alt="logo" class="toggle-white">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="desktop-logo">
+                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-logo">
+                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="desktop-dark">
+                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-dark">
+                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="desktop-white">
+                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-white">
                     </a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                     <div class="d-flex align-items-center">
                         <div class="me-sm-2 me-0">
-                            <img src="{{ asset('assets/images/profile.png') }}" alt="img" width="32"
+                            <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="img" width="32"
                                 height="32" class="rounded-circle">
                         </div>
                         {{-- <div class="d-sm-block d-none">
