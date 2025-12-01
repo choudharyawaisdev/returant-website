@@ -167,14 +167,18 @@
     {{-- NEW: FULL-WIDTH SEARCH BAR --}}
     <div class="container-fluid bg-light py-3 border-bottom">
         <div class="container">
-            <form action="{{ url('/menu/search') }}" method="GET" class="row g-2">
+            <form action="{{ url('/') }}" method="GET" class="row g-2">
                 <div class="col-12">
                     <div class="input-group">
-                        <input type="search" name="q" class="form-control rounded-pill pe-5"
-                            placeholder="Search menu items..." aria-label="Search" style="height: 48px;">
+                        <input type="search" name="q" value="{{ $searchQuery }}"
+                            class="form-control rounded-pill pe-5" placeholder="Search menu items..." aria-label="Search"
+                            style="height: 48px;">
+
                         <span class="input-group-text bg-transparent border-0 position-absolute end-0"
                             style="z-index: 10; top: 0; bottom: 0;">
-                            <button type="submit" class="btn btn-link p-0 text-dark"><i class="fas fa-search"></i></button>
+                            <button type="submit" class="btn btn-link p-0 text-dark">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </span>
                     </div>
                 </div>
