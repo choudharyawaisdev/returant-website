@@ -142,6 +142,16 @@
                     @enderror
                 </div>
 
+                 <div class="form-group">
+                    <label class="small font-weight-600">Phone Number</label>
+                    <input type="text" name="phone_number" class="form-control @error('phone_number') is-invalid @enderror"
+                        placeholder="Phone Number" required>
+
+                    @error('name')
+                        <span class="text-danger small">{{ $message }}</span>
+                    @enderror
+                </div>
+
                 <!-- Email -->
                 <div class="form-group">
                     <label class="small font-weight-600">Email</label>
@@ -203,8 +213,9 @@
         </div>
 
         <!-- RIGHT: Image with no text -->
+        <!-- RIGHT: Image -->
         <div class="auth-visual">
-            <div class="visual-overlay"></div>
+          <img src="{{ asset('assets/images/login.jpg') }}" alt="">
         </div>
 
     </div>

@@ -169,7 +169,7 @@
 
         <!-- RIGHT: Image -->
         <div class="auth-visual">
-            <div class="visual-overlay"></div>
+          <img src="{{ asset('assets/images/login.jpg') }}" alt="">
         </div>
 
     </div>
