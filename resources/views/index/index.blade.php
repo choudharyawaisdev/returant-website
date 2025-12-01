@@ -133,8 +133,8 @@
             <div class="carousel-inner">
                 {{-- Single banner image --}}
                 <div class="carousel-item active">
-                    <img src="{{ asset('assets/images/banner image.png') }}" class="d-block mx-auto" alt="Special Offer Banner"
-                        style="object-fit: cover; height: 300px; max-width: 95%; border-radius: 15px;">
+                    <img src="{{ asset('assets/images/banner pizza.jpg') }}" class="d-block mx-auto" alt="Special Offer Banner"
+                        style="object-fit: cover; height: 532px; max-width: 95%; border-radius: 15px;">
                 </div>
             </div>
         </div>
@@ -200,7 +200,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <img src="{{ $menu->image }}" alt="{{ $menu->title }}" class="rounded-4"
-                                            style=" height:120px; object-fit:cover;">
+                                            style=" height:120px; width:115px; object-fit:cover;">
                                     </div>
 
                                     <div class="flex-grow-1 ms-3">
@@ -249,7 +249,7 @@
 
                     <div class="modal-body d-flex flex-column flex-md-row">
                         <img id="modalImage" class="rounded-4 me-md-3 mb-3 img-thumbnail"
-                            style="height:200px;object-fit:cover;">
+                            style="height:200px; width:200px; object-fit:cover;">
 
                         <div class="flex-grow-1">
 
