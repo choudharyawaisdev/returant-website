@@ -225,8 +225,11 @@
                                         <div class="position-absolute top-0 end-0 m-2">
                                             <button class="btn btn-light rounded-circle shadow wishlist-btn"
                                                 data-id="{{ $menu->id }}">
-                                                <i
-                                                    class="{{ in_array($menu->id, $wishlistIds ?? []) ? 'fa-solid fa-heart fs-5 text-danger' : 'fa-regular fa-heart fs-5' }}"></i>
+                                                <i class="wishlist-icon 
+                                                     {{ in_array($menu->id, $wishlistIds) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"
+                                                    data-id="{{ $menu->id }}"
+                                                    style="cursor:pointer; font-size:22px;"></i>
+
                                             </button>
                                         </div>
                                     </div>
@@ -706,11 +709,9 @@
         });
     </script>
     <script>
-        $(document).on('click', '.wishlist-btn', function(e) {
-            e.preventDefault();
-
-            let btn = $(this);
-            let menuId = btn.data('id');
+        $(document).on("click", ".wishlist-icon", function() {
+            let icon = $(this);
+            let menuId = icon.data("id");
 
             $.ajax({
                 url: "{{ route('wishlist.toggle') }}",
@@ -720,18 +721,10 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    if (response.status === 'added') {
-                        btn.find('i').removeClass('fa-regular')
-                            .addClass('fa-solid text-danger');
-                    } else if (response.status === 'removed') {
-                        btn.find('i').removeClass('fa-solid text-danger')
-                            .addClass('fa-regular');
-                    }
-                },
-                error: function(xhr) {
-                    if (xhr.status === 401) {
-                        alert("Please login to use wishlist.");
-                        window.location.href = "/login";
+                    if (response.status === "added") {
+                        icon.removeClass("far fa-heart").addClass("fas fa-heart text-danger");
+                    } else {
+                        icon.removeClass("fas fa-heart text-danger").addClass("far fa-heart");
                     }
                 }
             });
