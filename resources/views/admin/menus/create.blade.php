@@ -68,14 +68,14 @@
                                 <div class="col-6 mb-3">
                                     <label for="addons" class="form-label">Add Ons (Optional)</label>
                                     <div
-                                        style="max-height:150px; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:5px;">
+                                        style="max-height:250px; overflow-y:auto; border:1px solid #ddd; padding:10px; border-radius:5px;">
                                         @foreach ($addons as $addon)
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="addons[]"
                                                     value="{{ $addon->id }}" id="addon{{ $addon->id }}"
                                                     {{ is_array(old('addons')) && in_array($addon->id, old('addons')) ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="addon{{ $addon->id }}">
-                                                    {{ $addon->name }} - ${{ number_format($addon->price, 2) }}
+                                                    {{ $addon->name }} - {{ number_format($addon->price, 2) }}
                                                 </label>
                                             </div>
                                         @endforeach

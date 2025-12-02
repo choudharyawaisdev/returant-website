@@ -116,9 +116,10 @@ class MenuController extends Controller
 
     public function edit(string $id)
     {
-        $menu = Menu::findOrFail($id);
+        $menu = Menu::with(['sizes', 'addons'])->findOrFail($id);
         $categories = Category::all();
-        return view('admin.menus.edit', compact('menu','categories'));
+        $addons = Addon::all(); 
+        return view('admin.menus.edit', compact('menu', 'categories', 'addons'));
     }
 
     public function update(Request $request, string $id)
@@ -127,16 +128,41 @@ class MenuController extends Controller
 
         $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
-            'discount' => 'nullable|numeric|min:0|lte:price',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'discount'    => 'nullable|numeric|min:0',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'single_price'=> 'nullable|numeric|min:0',
+            'type'        => 'nullable|array',
+            'type.*'      => 'nullable|string|max:100',
+            'price'       => 'nullable|array',
+            'price.*'     => 'nullable|numeric|min:0',
+            'addons'      => 'nullable|array',
+            'addons.*'    => 'exists:addons,id',
         ]);
 
-        $imagePath = $menu->image;
+        // Determine the first/main price (same logic as create)
+        $firstPrice = null;
+        if (filled($request->single_price)) {
+            $firstPrice = $request->single_price;
+        } else {
+            $prices = $request->filled('price') ? $request->price : [];
+            foreach ($prices as $p) {
+                if (is_numeric($p) && $p > 0) {
+                    $firstPrice = $p;
+                    break;
+                }
+            }
+        }
 
+        if (!$firstPrice) {
+            return back()->withErrors(['price' => 'At least one price (single or via type) is required.'])->withInput();
+        }
+
+        // Handle image upload
+        $imagePath = $menu->image;
         if ($request->hasFile('image')) {
+            // Delete old image
             if ($menu->image && File::exists(public_path($menu->image))) {
                 File::delete(public_path($menu->image));
             }
@@ -146,16 +172,45 @@ class MenuController extends Controller
             $imagePath = 'menu_images/' . $imageName;
         }
 
-        $menu->update([
-            'category_id' => $request->category_id,
-            'title' => $request->title,
-            'description' => $request->description,
-            'price' => $request->price,
-            'discount' => $request->discount ?? 0,
-            'image' => $imagePath,
-        ]);
+        DB::transaction(function () use ($request, $menu, $firstPrice, $imagePath) {
+            // Update main menu item
+            $menu->update([
+                'category_id'  => $request->category_id,
+                'title'        => $request->title,
+                'description'  => $request->description ?? null,
+                'discount'     => $request->discount ?? 0,
+                'image'        => $imagePath,
+                'price'        => $firstPrice, // main display price
+            ]);
 
-        return redirect()->route('admin.menus.index')->with('success', 'Menu item updated successfully.');
+            // === Update Size/Types (MenuSize) ===
+            // Delete old sizes
+            $menu->sizes()->delete();
+
+            // Add new ones
+            $types  = $request->input('type', []);
+            $prices = $request->input('price', []);
+
+            foreach ($types as $index => $type) {
+                $price = $prices[$index] ?? null;
+                if (!empty($type) && is_numeric($price) && $price >= 0) {
+                    MenuSize::create([
+                        'menu_id' => $menu->id,
+                        'name'    => $type,
+                        'price'   => $price,
+                    ]);
+                }
+            }
+
+            // === Update Addons (Pivot Table) ===
+            $menu->addons()->detach(); // remove all
+            if ($request->has('addons')) {
+                $menu->addons()->attach($request->addons);
+            }
+        });
+
+        return redirect()->route('admin.menus.index')
+            ->with('success', 'Menu item updated successfully.');
     }
 
     public function destroy(string $id)
