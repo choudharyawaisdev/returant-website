@@ -26,17 +26,16 @@
         }
 
         .price-tag {
-            background-color: green;
-            color: #FFC000;
+            background-color: black;
+            color: white;
             padding: 4px 10px;
             border-radius: 6px;
             font-size: 1rem;
         }
 
         .btn-custom-primary {
-            background-color: #A9262B;
-            border-color: #A9262B;
-            color: white;
+            background-color: #fccb0b;
+            color: black;
             font-weight: bold;
         }
 
@@ -48,9 +47,9 @@
         }
 
         .quantity-btn {
-            background-color: #A9262B;
+            background-color: #fccb0b;
             border: none;
-            color: white;
+            color: black;
             font-weight: bold;
             width: 32px;
             height: 32px;
@@ -163,28 +162,48 @@
             </div>
         </div>
     </nav>
+<style>
+    .search-input {
+    border: none !important;
+    border-bottom: 2px solid #000 !important; /* Only bottom border */
+    border-radius: 0 !important;              /* No rounding */
+    box-shadow: none !important;              /* No shadow */
+    height: 48px;
+}
 
+.search-input:focus {
+    border-bottom: 2px solid #A9262B !important; /* Your theme color on focus */
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+</style>
     {{-- NEW: FULL-WIDTH SEARCH BAR --}}
-    <div class="container-fluid bg-light py-3 border-bottom">
-        <div class="container">
-            <form action="{{ url('/') }}" method="GET" class="row g-2">
-                <div class="col-12">
-                    <div class="input-group">
-                        <input type="search" name="q" value="{{ $searchQuery }}"
-                            class="form-control rounded-pill pe-5" placeholder="Search menu items..." aria-label="Search"
-                            style="height: 48px;">
+<div class="container-fluid bg-light py-3 border-bottom">
+    <div class="container">
+        <form action="{{ url('/') }}" method="GET" class="row g-2">
+            <div class="col-12">
+                <div class="position-relative">
+                    
+                    <!-- Search Icon on Left -->
+                    <span class="position-absolute top-50 translate-middle-y" style="left: 10px;">
+                        <i class="fas fa-search text-dark"></i>
+                    </span>
 
-                        <span class="input-group-text bg-transparent border-0 position-absolute end-0"
-                            style="z-index: 10; top: 0; bottom: 0;">
-                            <button type="submit" class="btn btn-link p-0 text-dark">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
+                    <!-- Input -->
+                    <input 
+                        type="search" 
+                        name="q" 
+                        value="{{ $searchQuery }}" 
+                        class="form-control search-input ps-5"
+                        placeholder="Search menu items..."
+                        aria-label="Search">
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
+
 
     @foreach ($categories as $category)
         @if ($category->menus->count())
@@ -226,8 +245,8 @@
                                         </div>
 
                                         <button
-                                            class="btn btn-custom-primary w-100 fw-bold rounded-pill py-1 add-to-cart-trigger"
-                                            data-bs-toggle="modal" data-bs-target="#productModal">
+                                            class="btn btn-custom-primary fw-bold rounded-pill py-1 add-to-cart-trigger"
+                                            data-bs-toggle="modal" data-bs-target="#productModal" style="width: 132px; ">
                                             Add To Cart
                                         </button>
 
@@ -315,7 +334,7 @@
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center mt-4">
-                                <span id="modalTotalPriceDisplay" class="fw-bold badge bg-success">Total: Rs. 0/-</span>
+                                <span id="modalTotalPriceDisplay" class="fw-bold badge bg-dark">Total: Rs. 0/-</span>
                                 <button type="submit" class="btn btn-custom-primary fw-bold rounded-pill">
                                     Add <span id="modalQtyDisplay">1</span> Item to Cart
                                 </button>

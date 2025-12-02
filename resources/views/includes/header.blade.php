@@ -149,7 +149,7 @@
 </style>
 {{-- TOP BAR (Logo and Cart) - STICKY --}}
 {{-- TOP BAR (Logo and Cart) - STICKY --}}
-<div class="top-bar py-3 sticky-top bg-white shadow-sm">
+<div class="top-bar py-3 sticky-top bg-white shadow-sm" style="background: yellow">
     <div class="container d-flex justify-content-between align-items-center">
 
         {{-- Logo --}}
