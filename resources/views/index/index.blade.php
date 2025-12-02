@@ -195,7 +195,6 @@
                 <div class="row g-4">
                     @foreach ($category->menus as $menu)
                         <div class="col-12 col-md-6 col-lg-4">
-                            {{-- MODIFIED: Added data-sizes and data-addons --}}
                             <div class="card shadow-sm p-3 product-card" data-id="{{ $menu->id }}"
                                 data-title="{{ $menu->title }}" data-description="{{ $menu->description }}"
                                 data-price="{{ $menu->price }}" data-image="{{ $menu->image }}"
@@ -204,17 +203,26 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <img src="{{ $menu->image }}" alt="{{ $menu->title }}" class="rounded-4"
-                                            style=" height:120px; width:115px; object-fit:cover;">
+                                            style="height:120px; width:115px; object-fit:cover;">
                                     </div>
 
                                     <div class="flex-grow-1 ms-3">
                                         <h6 class="fw-bold fs-5 mb-1">{{ $menu->title }}</h6>
-                                        <p class="text-muted small mb-2">{{ $menu->description }}</p>
+
+                                        {{-- Show only first 10 words of description --}}
+                                        <p class="text-muted small mb-2">
+                                            {{ \Illuminate\Support\Str::words($menu->description, 10, '...') }}
+                                        </p>
 
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <span class="fw-bold price-tag" id="card-price-{{ $menu->id }}">
                                                 Rs. {{ $menu->price }}/-
                                             </span>
+
+                                            {{-- Show discount only if it exists --}}
+                                            @if (!empty($menu->discount) && $menu->discount > 0)
+                                                <span class="badge bg-danger">-{{ $menu->discount }}%</span>
+                                            @endif
                                         </div>
 
                                         <button
@@ -222,14 +230,14 @@
                                             data-bs-toggle="modal" data-bs-target="#productModal">
                                             Add To Cart
                                         </button>
+
                                         <div class="position-absolute top-0 end-0 m-2">
                                             <button class="btn btn-light rounded-circle shadow wishlist-btn"
                                                 data-id="{{ $menu->id }}">
                                                 <i class="wishlist-icon 
-                                                     {{ in_array($menu->id, $wishlistIds) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"
+                                                {{ in_array($menu->id, $wishlistIds) ? 'fas fa-heart text-danger' : 'far fa-heart' }}"
                                                     data-id="{{ $menu->id }}"
                                                     style="cursor:pointer; font-size:22px;"></i>
-
                                             </button>
                                         </div>
                                     </div>
@@ -241,6 +249,7 @@
             </section>
         @endif
     @endforeach
+
 
 
     {{-- MODIFIED: PRODUCT MODAL (For Quantity, Sizes, and Add-ons) --}}
