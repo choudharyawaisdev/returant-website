@@ -127,18 +127,18 @@
         }
     @endphp
 
-    {{-- NEW: SINGLE IMAGE SLIDER (Carousel) --}}
+    {{-- RESPONSIVE SINGLE IMAGE SLIDER --}}
     <div class="container my-4">
         <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-                {{-- Single banner image --}}
                 <div class="carousel-item active">
-                    <img src="{{ asset('assets/images/banner pizza.jpg') }}" class="d-block mx-auto" alt="Special Offer Banner"
-                        style="object-fit: cover; height: 532px; max-width: 95%; border-radius: 15px;">
+                    <img src="{{ asset('assets/images/banner image.png') }}" class="d-block w-100" alt="Special Offer Banner"
+                        style="object-fit: cover; height: 60vh; border-radius: 15px;">
                 </div>
             </div>
         </div>
     </div>
+
 
     {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
     <nav id="categoryNav" class="navbar navbar-expand-lg bg-white shadow-sm main-navbar py-4">
