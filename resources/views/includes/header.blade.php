@@ -148,19 +148,28 @@
     }
 </style>
 {{-- TOP BAR (Logo and Cart) - STICKY --}}
-<div class="top-bar py-3 sticky-top">
+{{-- TOP BAR (Logo and Cart) - STICKY --}}
+<div class="top-bar py-3 sticky-top bg-white shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
-        <a class="navbar-brand fw-bold fs-3" href="#">
-            <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" width="120px" style="border-radius: 10px">
+
+        {{-- Logo --}}
+        <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="">
+            <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" class="rounded-2"
+                style="width: 120px; height: auto;">
         </a>
+
+        {{-- Right Side: Auth / Cart --}}
         <div class="d-flex align-items-center gap-3">
+
+            {{-- Guest: Login/Register --}}
             @guest
-                <a href="/login" class="btn btn-login-custom fw-bold shadow-sm px-4 py-2 d-none d-lg-block">
+                <a href="{{ route('login') }}" class="btn btn-login-custom fw-bold shadow-sm d-none d-lg-inline-block">
                     Register Now
                 </a>
             @endguest
-            @auth
 
+            {{-- Authenticated User --}}
+            @auth
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center user-dropdown-toggle" id="userDropdown"
                         data-bs-toggle="dropdown">
@@ -169,55 +178,69 @@
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow-lg" aria-labelledby="userDropdown">
-
                         <li class="px-3 py-2 text-center">
                             <span class="fw-bold text-dark" style="font-size: 14px;">{{ Auth::user()->name }}</span>
                         </li>
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-
                         <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('wishlist.index') }}">
                                 <i class="fa-regular fa-heart me-2 text-danger"></i> My Wishlist
                             </a>
                         </li>
-
                         <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('client.order') }}">
                                 <i class="fa-solid fa-bag-shopping me-2 text-primary"></i> My Orders
                             </a>
                         </li>
-
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-
                         <li>
                             <a class="dropdown-item user-dropdown-item text-danger fw-bold" href="{{ route('logout') }}"
                                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-
                                 <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
                             </a>
-
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
                         </li>
-
                     </ul>
                 </div>
             @endauth
-            @if (!request()->routeIs('wishlist.index') && !request()->routeIs('client.order') && !request()->routeIs('checkout.index')) 
+
+            {{-- Cart Button (hide on wishlist/order/checkout) --}}
+            @if (!request()->routeIs(['wishlist.index', 'client.order', 'checkout.index']))
+                @php
+                    $cartCount = collect(session()->get('cart', []))->sum('quantity');
+                @endphp
+
                 <button id="cartButton" class="btn position-relative bg-light shadow-sm rounded-circle"
                     style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
                     aria-controls="cartOffcanvas">
                     <i class="fa-solid fa-cart-shopping text-dark"></i>
                     <span id="cartBadge"
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ $cartCount }}
+                    </span>
                 </button>
             @endif
+
         </div>
     </div>
 </div>
+<script>
+    // Update Cart Badge via AJAX
+    function updateCartBadge() {
+        fetch('/cart/get')
+            .then(res => res.json())
+            .then(data => {
+                const badge = document.getElementById('cartBadge');
+                if (badge) badge.textContent = data.cartCount ?? 0;
+            });
+    }
+
+    // Run on page load
+    document.addEventListener('DOMContentLoaded', updateCartBadge);
+</script>
