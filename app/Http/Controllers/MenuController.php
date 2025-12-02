@@ -14,7 +14,7 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::all();
+        $menus = Menu::orderBy('created_at', 'desc')->get();;
         return view('admin.menus.index', compact('menus'));
     }
 

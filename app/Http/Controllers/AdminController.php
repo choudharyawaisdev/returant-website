@@ -12,7 +12,7 @@ class AdminController extends Controller
 {
     public function orderindex()
     {        
-        $orders = Order::with('items', 'user')->get();
+        $orders = Order::with('items', 'user')->orderBy('created_at', 'desc')->get();
         return view('admin.orders.index', compact('orders'));
     }
 
