@@ -173,7 +173,7 @@
                 <div class="dropdown">
                     <a href="#" class="d-flex align-items-center user-dropdown-toggle" id="userDropdown"
                         data-bs-toggle="dropdown">
-                        <img src="{{ asset('assets/images/user.png') }}" class="rounded-circle shadow-sm user-avatar"
+                        <img src="{{ asset('assets/images/coffee-break.png') }}" class="rounded-circle shadow-sm user-avatar"
                             alt="User">
                     </a>
 

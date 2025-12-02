@@ -14,9 +14,9 @@ class Addon extends Model
         'price',
     ];
 
-    public function menus()
+    public function menu()
     {
-        return $this->belongsToMany(Menu::class, 'menu_addon', 'addon_id', 'menu_id');
+        return $this->belongsTo(Menu::class);
     }
 
 

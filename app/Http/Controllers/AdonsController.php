@@ -10,7 +10,7 @@ class AdonsController extends Controller
 {
     public function index()
     {
-        $adons = Addon::with('menu')->orderBy('created_at', 'desc')->get();
+        $adons = Addon::with('menu')->get();
         return view('admin.addons.index', compact('adons'));
     }
 
