@@ -8,19 +8,28 @@
             padding: 30px;
             border: 1px solid var(--border-color);
         }
-
-
     </style>
     <div class="container my-5">
         <div class="row">
             <div class="col-12">
-                <h1 class="checkout-title mb-5 fw-bold" style="color: #a9262b">Proceed to Checkout</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/') }}" class="text-decoration-none" style="color:black;">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active fw-bold" aria-current="page" style="color:#fccb0b;">
+                            Proceed to Checkout
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
 
+
         <div class="row g-5">
             <div class="col-lg-8">
-                <form action="{{ route('order.place') }}" method="POST" class="needs-validation" novalidate id="checkoutForm">
+                <form action="{{ route('order.place') }}" method="POST" class="needs-validation" novalidate
+                    id="checkoutForm">
                     @csrf
 
                     <div class="row g-3 mb-3 p-3 bg-light" style="border-radius:10px">
@@ -74,8 +83,7 @@
                         <p class="mb-3 fw-bold">Payment Method</p>
                         <div class="form-check cod-option p-3 border rounded">
                             <label class="form-check-label d-flex align-items-center" for="cod">
-                                <i class="fas fa-money-bill-wave me-2"
-                                    style="color: #a9262b; font-size: 1.5rem;"></i>
+                                <i class="fas fa-money-bill-wave me-2" style="color: #a9262b; font-size: 1.5rem;"></i>
                                 <span class="fw-bold ">Cash on Delivery (COD)</span>
                             </label>
                             {{-- FIX: Add a hidden input to submit the payment_method value --}}
@@ -88,21 +96,21 @@
                 </form>
             </div>
 
-            <div class="col-lg-4 order-lg-last bg-light " style="border-radius:10px">
+            <div class="col-lg-4 order-lg-last bg-light" style="border-radius:10px">
                 <div class="summary-card shadow mt-3">
+
                     <h4 class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
-                        <span class="text-dark fw-bold"><i class="fas fa-shopping-cart me-2"
-                                style="color: var(--primary-color);"></i> Your Order</span>
+                        <span class="text-dark fw-bold">Your Order</span>
                     </h4>
 
                     <ul class="list-group">
-                        {{-- LOOPING OVER $cartItems (fixed the undefined variable error) --}}
                         @foreach ($cartItems as $item)
                             <li class="list-group-item d-flex justify-content-between lh-sm">
                                 <div class="d-flex w-100">
                                     <img src="{{ $item['image'] ?? 'https://via.placeholder.com/60' }}"
                                         alt="{{ $item['title'] }}" class="img-fluid rounded me-3"
                                         style="height:60px; object-fit:cover;">
+
                                     <div class="flex-grow-1">
                                         <h6 class="my-0 fw-bold">{{ $item['title'] }}</h6>
 
@@ -112,29 +120,33 @@
                                         @endif
 
                                         {{-- Display Add-ons --}}
-                                        @if (!empty($item['add_ons']))
-                                            @php
-                                                // Decode add_ons if stored as JSON string
-                                                $addons = is_string($item['add_ons'])
-                                                    ? json_decode($item['add_ons'], true)
-                                                    : $item['add_ons'];
-                                            @endphp
-                                            @if (!empty($addons))
-                                                <small class="d-block text-muted">Add-ons:
-                                                    {{ collect($addons)->pluck('name')->implode(', ') }}</small>
-                                            @endif
+                                        @php
+                                            $addons = is_string($item['add_ons'])
+                                                ? json_decode($item['add_ons'], true)
+                                                : $item['add_ons'];
+                                        @endphp
+                                        @if (!empty($addons))
+                                            <small class="d-block text-muted">
+                                                Add-ons: {{ collect($addons)->pluck('name')->implode(', ') }}
+                                            </small>
                                         @endif
 
-                                        <small class="text-muted">Qty: {{ $item['quantity'] }} x Rs.
-                                            {{ number_format($item['price']) }}/-</small>
+                                        <small class="text-muted">
+                                            Qty: {{ $item['quantity'] }} x Rs. {{ number_format($item['price']) }}/-
+                                        </small>
                                     </div>
                                 </div>
-                                <span class="text-dark fw-bold text-nowrap">Rs.
-                                    {{ number_format($item['price'] * $item['quantity']) }}/-</span>
+
+                                <span class="text-dark fw-bold text-nowrap">
+                                    Rs. {{ number_format($item['price'] * $item['quantity']) }}/-
+                                </span>
                             </li>
                         @endforeach
                     </ul>
-
+                    {{-- ADD MORE ITEMS LINK --}}
+                    <a href="{{ url('/') }}" class="btn btn-sm w-100 mt-3 fw-bold mb-2" style="background:#ffffff;">
+                        + Add More Items
+                    </a>
                     <ul class="list-group mb-0">
                         <li class="list-group-item d-flex justify-content-between">
                             <span class="my-0">Subtotal</span>
@@ -152,11 +164,14 @@
                         </li>
                     </ul>
 
-                    {{-- The button submits the main form using its ID --}}
-                    <button type="submit" form="checkoutForm" class="btn btn-lg w-100 mt-3 text-white"
-                        style="background-color: #a9262b">
-                        <i class="fas fa-motorcycle me-2"></i> Place Order Now
+
+
+                    {{-- PLACE ORDER BUTTON --}}
+                    <button type="submit" form="checkoutForm" class="btn btn-lg w-100 mt-3 text-dark fw-bold"
+                        style="background-color: #fccb0b;">
+                         Place Order Now
                     </button>
+
                 </div>
             </div>
         </div>
