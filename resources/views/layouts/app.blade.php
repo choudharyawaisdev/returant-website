@@ -43,82 +43,65 @@
             @yield('body')
         </main>
 
-        <footer class="text-dark text-center text-lg-start" style="background-color: #f8f9fa;">
-            <div class="container p-4 pb-0">
-                <section>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mt-6">
-                            <h6 class="text-uppercase mb-4 fw-bold">Chinos Café</h6>
-                            <p>
-                                Welcome to Chinos Café — where great taste meets perfect ambiance.
-                                We serve fresh platters, burgers, pasta, wings, pizza, and signature drinks
-                                made with quality ingredients and authentic flavors.
-                                Your comfort and satisfaction are our priority.
-                            </p>
-                        </div>
+<footer class="text-dark text-center text-lg-start" style="background-color: #f8f9fa;">
+    <div class="container p-4 pb-0">
 
+        <section>
+            <div class="row align-items-start">
 
-                        {{-- <div class="col-md-6 col-lg-2 col-xl-2 mx-auto mt-6">
-                            <h6 class="text-uppercase mb-4 fw-bold">Useful Links</h6>
-                            <p><a class="text-dark">Your Account</a></p>
-                            <p><a class="text-dark">Become an Affiliate</a></p>
-                            <p><a class="text-dark">Shipping Rates</a></p>
-                            <p><a class="text-dark">Help</a></p>
-                        </div> --}}
+                <!-- Logo -->
+                <div class="col-md-3 col-lg-2 mb-3 d-flex justify-content-center justify-content-md-start">
+                    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+                        <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2" 
+                             style="width: 120px; height: auto;">
+                    </a>
+                </div>
 
-                        <div class="col-md-4 col-lg-6 col-xl-6 mx-auto mt-6">
-                            <h6 class="text-uppercase mb-4 fw-bold">Contact</h6>
-                            <p><i class="fas fa-home me-2"></i> Chinot Sargodha Road</p>
-                            <p><i class="fas fa-envelope me-2"></i> cafechinosofficial@gmail.com</p>
-                            <p><i class="fas fa-phone me-2"></i>+92 3197793578</p>
-                            <p><i class="fas fa-print me-2"></i>+92 3117593578</p>
-                        </div>
-                    </div>
-                </section>
+                <!-- Contact Section -->
+                <div class="col-md-5 col-lg-5 col-xl-5 mx-auto mt-3">
+                    <h6 class="text-uppercase mb-3 fw-bold">Chinos Café</h6>
+                    <p class="mb-1"><strong>Phone:</strong> +92 3197793578</p>
+                    <p class="mb-1">
+                        <strong>Address:</strong> Dr. Saucy - Sialkot Cantt, 15th Division, 
+                        V Eats Food Court, Ghalib Rd, Sialkot Cantonment, Sialkot
+                    </p>
+                </div>
 
-                <hr class="my-3">
+                <!-- Timings -->
+                <div class="col-md-4 col-lg-5 col-xl-5 mt-3">
+                    <h6 class="text-uppercase mb-3 fw-bold">Our Timing</h6>
+                    <p class="mb-1"><strong>Monday - Sunday</strong></p>
+                    <p class="mb-1"><strong>04:00 PM - 12:30 AM</strong></p>
+                </div>
 
-                <section class="p-3 pt-0">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-7 col-lg-8  text-md-start">
-                            <div class="p-3">
-                                © 2025 Copyright:
-                                <a class="text-dark fw-bold" href="#">cafechinos.cafe</a>
-                                <br>
-                                <span class="text-muted">Developed by <strong>DevtaSoft Company</strong></span>
-                            </div>
-
-                        </div>
-
-                        {{-- <div class="col-md-5 col-lg-4 text-center text-md-end">
-                            <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-google"></i></a>
-                            <a class="btn btn-outline-dark btn-floating m-1"><i class="fab fa-instagram"></i></a>
-                        </div> --}}
-                    </div>
-                </section>
             </div>
-        </footer>
+        </section>
+
+        <hr class="my-3">
+
+        <section class="p-3 pt-0">
+            <div class="row d-flex align-items-center">
+
+                <div class="col-md-12 text-center">
+                    <div class="p-3">
+                        © 2025 Copyright:
+                        <a class="text-dark fw-bold" href="#">cafechinos.cafe</a>
+                        <br>
+                        <span class="text-muted">
+                            Developed by <strong>DevtaSoft Company</strong>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</footer>
+
     </div>
     <div id="responsive-overlay"></div>
     @include('includes.script')
 </body>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-
-<!-- Popper.js (required for Bootstrap 4 tooltips & dropdowns) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-
-<!-- Bootstrap 4 JS -->
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
-
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/2.3.5/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap4.js"></script>
-
-<script>
-    new DataTable('#example');
-</script>
 
 </html>
