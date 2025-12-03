@@ -127,12 +127,15 @@
     @endphp
 
     {{-- RESPONSIVE SINGLE IMAGE SLIDER --}}
-    <div class="container my-4">
+    <div class="container-fluid my-4">
         <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="{{ asset('assets/images/hero banner 2.jpg') }}" class="d-block w-100" alt="Special Offer Banner"
-                        style="object-fit: fill; height: 60vh; border-radius: 15px;">
+                    <video class="d-block w-100 mobile" autoplay muted loop
+                        style="object-fit: fill; border-radius: 15px;">
+                        <source src="{{ asset('assets/video/hero video mobile tab.mp4') }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
         </div>

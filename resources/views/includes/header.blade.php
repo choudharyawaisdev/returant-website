@@ -127,23 +127,36 @@
 <div class="top-bar py-3 sticky-top bg-white shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
 
-        {{-- LOGO --}}
-        <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="">
-            <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2"
-                style="width: 120px; height: auto;">
-        </a>
+        {{-- LOGO + LOCATION --}}
+        <div class="d-flex align-items-center gap-3">
+            <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="">
+                <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2"
+                     style="width: 120px; height: auto;">
+            </a>
+
+            {{-- LOCATION --}}
+            <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-location-dot text-dark fs-5"></i>
+                <div class="d-flex flex-column">
+                    <span class="fw-bold" style="font-size: 0.9rem;">Visit Now</span>
+                    <span class="text-muted" style="font-size: 0.8rem;">
+                        Chiniot Pizza Shop & Hub
+                    </span>
+                </div>
+            </div>
+
+        </div>
 
         {{-- RIGHT SIDE --}}
         <div class="d-flex align-items-center gap-3">
 
             {{-- GUEST USER --}}
             @guest
-                <a href="{{ route('login') }}"
+                <a href="{{ route('register') }}"
                    class="btn btn-login-custom fw-bold shadow-sm d-inline-block">
-                    Sign in / Register Now
+                    Register Now
                 </a>
             @endguest
-
 
             {{-- AUTH USER --}}
             @auth
@@ -151,7 +164,7 @@
                     <a href="#" class="d-flex align-items-center" id="userDropdown"
                        data-bs-toggle="dropdown">
                         <img src="{{ asset('assets/images/coffee-break.png') }}" class="rounded-circle shadow-sm user-avatar"
-                            alt="User">
+                             alt="User">
                     </a>
 
                     <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow-lg">
@@ -187,7 +200,6 @@
                     </ul>
                 </div>
             @endauth
-
 
             {{-- CART BUTTON --}}
             @if (!request()->routeIs(['wishlist.index', 'client.order', 'checkout.index']))
