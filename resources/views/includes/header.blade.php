@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
 <style>
     :root {
         --primary-color: #A9262B;
@@ -6,8 +7,7 @@
         --dark-bg: #1A1A1A;
     }
 
-    /* --- Existing Styles for Navbar & Active Links --- */
-
+    /* --- Navbar Hover & Active --- */
     .navbar-nav .nav-link {
         position: relative;
     }
@@ -28,7 +28,6 @@
         transition: transform 0.3s ease;
     }
 
-    /* Set active color for sticky nav links */
     .navbar-nav .nav-link.active {
         color: var(--primary-color) !important;
         font-weight: bold;
@@ -45,9 +44,7 @@
         transform: scaleX(1);
     }
 
-    /* --- Z-index and Sticky Classes --- */
-
-    /* Z-index for sticky elements */
+    /* Sticky Layers */
     .top-bar {
         z-index: 1050;
         background-color: #a9262b;
@@ -61,46 +58,35 @@
         z-index: 1060;
     }
 
-    /* --- Offcanvas Specific Styles --- */
-
+    /* Offcanvas */
     .offcanvas-body .nav-link {
         padding-top: 10px;
         padding-bottom: 10px;
         color: #333 !important;
     }
 
-    /* Set active color for offcanvas links */
     .offcanvas-body .nav-link.active {
         font-weight: bold;
         color: var(--primary-color) !important;
         background-color: #f8f9fa;
-        /* Light background for highlight */
         border-radius: 8px;
     }
 
-    @media (max-width: 991.98px) {
-        #offcanvasNavbarLabel .nav-link {
-            display: block;
-        }
-    }
-
-    /* --- Custom Button Styles --- */
-
+    /* Login Button */
     .btn-login-custom {
-        background-color: #fafcf9;
+        background-color: rgba(252, 203, 11, 0.2);
         color: #1A1A1A;
-        border: none;
-        padding: 10px 28px;
-        font-size: 16px;
+        border: 1px solid black;
+        padding: 7px;
+        font-size: 12px;
         transition: 0.3s ease;
     }
 
     .btn-login-custom:hover {
-        background-color: #ffffff;
+        background-color: rgba(252, 203, 11, 0.2);
         color: #000;
     }
-</style>
-<style>
+
     /* Avatar */
     .user-avatar {
         width: 42px;
@@ -114,7 +100,7 @@
         transform: scale(1.05);
     }
 
-    /* Dropdown Menu */
+    /* Dropdown */
     .user-dropdown {
         border-radius: 12px;
         padding: 6px 0;
@@ -123,7 +109,6 @@
         min-width: 200px;
     }
 
-    /* Dropdown Items */
     .user-dropdown-item {
         font-size: 14px;
         padding: 10px 18px;
@@ -135,93 +120,88 @@
         background: #f4f4f4;
         color: #a9262b;
     }
-
-    /* Divider Styling */
-    .dropdown-divider {
-        margin: 6px 0;
-        border-color: #e6e6e6;
-    }
-
-    /* Dark mode hover or Primary hover? */
-    .user-dropdown-item.text-danger:hover {
-        background: #ffeaea;
-    }
 </style>
-{{-- TOP BAR (Logo and Cart) - STICKY --}}
-{{-- TOP BAR (Logo and Cart) - STICKY --}}
-<div class="top-bar py-3 sticky-top bg-white shadow-sm" style="background: yellow">
+
+
+{{-- TOP BAR --}}
+<div class="top-bar py-3 sticky-top bg-white shadow-sm">
     <div class="container d-flex justify-content-between align-items-center">
 
-        {{-- Logo --}}
+        {{-- LOGO --}}
         <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="">
-            <img src="{{ asset('assets/images/logo.jpg') }}" alt="Grub Logo" class="rounded-2"
+            <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2"
                 style="width: 120px; height: auto;">
         </a>
 
-        {{-- Right Side: Auth / Cart --}}
+        {{-- RIGHT SIDE --}}
         <div class="d-flex align-items-center gap-3">
 
-            {{-- Guest: Login/Register --}}
+            {{-- GUEST USER --}}
             @guest
-                <a href="{{ route('login') }}" class="btn btn-login-custom fw-bold shadow-sm d-none d-lg-inline-block">
-                    Register Now
+                <a href="{{ route('login') }}"
+                   class="btn btn-login-custom fw-bold shadow-sm d-inline-block">
+                    Sign in / Register Now
                 </a>
             @endguest
 
-            {{-- Authenticated User --}}
+
+            {{-- AUTH USER --}}
             @auth
                 <div class="dropdown">
-                    <a href="#" class="d-flex align-items-center user-dropdown-toggle" id="userDropdown"
-                        data-bs-toggle="dropdown">
+                    <a href="#" class="d-flex align-items-center" id="userDropdown"
+                       data-bs-toggle="dropdown">
                         <img src="{{ asset('assets/images/coffee-break.png') }}" class="rounded-circle shadow-sm user-avatar"
                             alt="User">
                     </a>
 
-                    <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow-lg" aria-labelledby="userDropdown">
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown shadow-lg">
+
                         <li class="px-3 py-2 text-center">
-                            <span class="fw-bold text-dark" style="font-size: 14px;">{{ Auth::user()->name }}</span>
+                            <span class="fw-bold text-dark">{{ Auth::user()->name }}</span>
                         </li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
                         <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('wishlist.index') }}">
                                 <i class="fa-regular fa-heart me-2 text-danger"></i> My Wishlist
                             </a>
                         </li>
+
                         <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('client.order') }}">
                                 <i class="fa-solid fa-bag-shopping me-2 text-primary"></i> My Orders
                             </a>
                         </li>
+
+                        <li><hr class="dropdown-divider"></li>
+
                         <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item user-dropdown-item text-danger fw-bold" href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item user-dropdown-item text-danger fw-bold"
+                               href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                 <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                         </li>
                     </ul>
                 </div>
             @endauth
 
-            {{-- Cart Button (hide on wishlist/order/checkout) --}}
-            @if (!request()->routeIs(['wishlist.index', 'client.order', 'checkout.index']))
-                @php
-                    $cartCount = collect(session()->get('cart', []))->sum('quantity');
-                @endphp
 
-                <button id="cartButton" class="btn position-relative bg-light shadow-sm rounded-circle"
-                    style="width:42px; height:42px;" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
-                    aria-controls="cartOffcanvas">
-                    <i class="fa-solid fa-cart-shopping text-dark"></i>
+            {{-- CART BUTTON --}}
+            @if (!request()->routeIs(['wishlist.index', 'client.order', 'checkout.index']))
+                @php $cartCount = collect(session()->get('cart', []))->sum('quantity'); @endphp
+
+                <button id="cartButton"
+                        class="btn position-relative shadow-sm bg-dark"
+                        style="width:42px; height:42px;"
+                        data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+
+                    <i class="fa-solid fa-cart-shopping text-white"></i>
+
                     <span id="cartBadge"
-                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark text-white shadow-sm">
                         {{ $cartCount }}
                     </span>
                 </button>
@@ -230,8 +210,10 @@
         </div>
     </div>
 </div>
+
+
+{{-- CART UPDATE SCRIPT --}}
 <script>
-    // Update Cart Badge via AJAX
     function updateCartBadge() {
         fetch('/cart/get')
             .then(res => res.json())
@@ -241,6 +223,5 @@
             });
     }
 
-    // Run on page load
     document.addEventListener('DOMContentLoaded', updateCartBadge);
 </script>

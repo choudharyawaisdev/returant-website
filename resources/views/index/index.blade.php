@@ -41,9 +41,9 @@
 
         /* NEW: Keep background color on hover */
         .btn-custom-primary:hover {
-            background-color: #A9262B;
-            border-color: #A9262B;
-            color: white;
+            background-color: #fccb0b;
+            border-color: #fccb0b;
+            color: black;
         }
 
         .quantity-btn {
