@@ -175,11 +175,11 @@
 
                         <li><hr class="dropdown-divider"></li>
 
-                        <li>
+                        {{-- <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('wishlist.index') }}">
                                 <i class="fa-regular fa-heart me-2 text-danger"></i> My Wishlist
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li>
                             <a class="dropdown-item user-dropdown-item" href="{{ route('client.order') }}">

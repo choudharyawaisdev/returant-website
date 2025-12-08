@@ -250,7 +250,7 @@
                                             Add To Cart
                                         </button>
 
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        {{-- <div class="position-absolute top-0 end-0 m-2">
                                             <button class="btn btn-light rounded-circle shadow wishlist-btn"
                                                 data-id="{{ $menu->id }}">
                                                 <i class="wishlist-icon 
@@ -258,7 +258,7 @@
                                                     data-id="{{ $menu->id }}"
                                                     style="cursor:pointer; font-size:22px;"></i>
                                             </button>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
