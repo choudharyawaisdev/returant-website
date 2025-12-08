@@ -5,11 +5,11 @@
                 <div class="horizontal-logo">
                     <a href="index.html" class="header-logo">
                         <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="desktop-logo">
-                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-logo">
-                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="desktop-dark">
-                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-dark">
-                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="desktop-white">
-                        <img src="{{ asset('assets/images/cafe chinos logo.jpg') }}" alt="logo" class="toggle-white">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="toggle-logo">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="desktop-dark">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="toggle-dark">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="desktop-white">
+                        <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" alt="logo" class="toggle-white">
                     </a>
                 </div>
             </div>

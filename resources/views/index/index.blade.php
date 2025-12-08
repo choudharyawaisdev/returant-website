@@ -133,7 +133,7 @@
                 <div class="carousel-item active">
                     <video class="d-block w-100 mobile" autoplay muted loop
                         style="object-fit: fill; border-radius: 15px;">
-                        <source src="{{ asset('assets/video/hero video mobile tab.mp4') }}" type="video/mp4">
+                        <source src="{{ asset('assets/video/banner-video.mp4') }}" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                 </div>
