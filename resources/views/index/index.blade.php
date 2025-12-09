@@ -152,17 +152,9 @@
         <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-<<<<<<< HEAD
                     <img class="d-block w-100 mobile" src="{{ asset('assets/images/buy 1 get 1 free.jpg') }}"
                         alt="Buy 1 Get 1 Free" style="object-fit: fill; border-radius: 15px;">
 
-=======
-                    <video class="d-block w-100 mobile" autoplay muted loop
-                        style="object-fit: fill; border-radius: 15px;">
-                        <source src="{{ asset('assets/video/banner-video.mp4') }}" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
->>>>>>> 5f9fd0ea760c3e6a0c291a1d8569e387d9a4a443
                 </div>
             </div>
         </div>
