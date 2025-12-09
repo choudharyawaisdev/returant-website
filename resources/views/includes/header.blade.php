@@ -129,8 +129,13 @@
 
         {{-- LOGO + LOCATION --}}
         <div class="d-flex align-items-center gap-3">
+<<<<<<< HEAD
             <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="" style="background: yellow">
                 <img src="{{ asset('assets/images/cafe_chinos_logo.png') }}" class="rounded-2"
+=======
+            <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="">
+                <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2"
+>>>>>>> 5f9fd0ea760c3e6a0c291a1d8569e387d9a4a443
                      style="width: 120px; height: auto;">
             </a>
 
