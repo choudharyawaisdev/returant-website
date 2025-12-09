@@ -43,61 +43,86 @@
             @yield('body')
         </main>
 
-<footer class="text-dark text-center text-lg-start" style="background-color: #f8f9fa;">
-    <div class="container p-4 pb-0">
+        <footer class="text-dark text-center text-lg-start" style="background-color: #f8f9fa;">
+            <div class="container p-4 pb-0">
 
-        <section>
-            <div class="row align-items-start">
+                <section>
+                    <div class="row">
 
-                <!-- Logo -->
-                <div class="col-md-3 col-lg-2 mb-3 d-flex justify-content-center justify-content-md-start">
-                    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-                        <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2" 
-                             style="width: 120px; height: auto;">
-                    </a>
-                </div>
+                        <!-- Logo -->
+                        <div class="col-md-3 col-lg-2 mb-3 d-flex justify-content-center justify-content-md-start">
+                            <a class="navbar-brand fw-bold d-flex align-items-center" href="#" >
+                                <img src="{{ asset('assets/images/logo.jpg') }}" class="rounded-2"
+                                    style="width: 120px; height: auto;">
+                            </a>
+                        </div>
 
-                <!-- Contact Section -->
-                <div class="col-md-5 col-lg-5 col-xl-5 mx-auto mt-3">
-                    <h6 class="text-uppercase mb-3 fw-bold">Chinos Café</h6>
-                    <p class="mb-1"><strong>Phone:</strong> +92 3197793578</p>
-                    <p class="mb-1">
-                        <strong>Address:</strong> Dr. Saucy - Sialkot Cantt, 15th Division, 
-                        V Eats Food Court, Ghalib Rd, Sialkot Cantonment, Sialkot
-                    </p>
-                </div>
+                        <!-- Contact Section -->
+                        <div class="col-md-3 col-lg-3 mt-3">
+                            <h6 class="text-uppercase mb-3 fw-bold">Chinos Café</h6>
+                            <p class="mb-1"><strong>Phone:</strong> +92 3197793578</p>
+                            <p class="mb-1">
+                                <strong>Address:</strong> Dr. Saucy - Sialkot Cantt, 15th Division,
+                                V Eats Food Court, Ghalib Rd, Sialkot Cantonment, Sialkot
+                            </p>
+                        </div>
 
-                <!-- Timings -->
-                <div class="col-md-4 col-lg-5 col-xl-5 mt-3">
-                    <h6 class="text-uppercase mb-3 fw-bold">Our Timing</h6>
-                    <p class="mb-1"><strong>Monday - Sunday</strong></p>
-                    <p class="mb-1"><strong>04:00 PM - 12:30 AM</strong></p>
-                </div>
+                        <!-- Timings -->
+                        <div class="col-md-2 col-lg-3 mt-3">
+                            <h6 class="text-uppercase mb-3 fw-bold">Our Timing</h6>
+                            <p class="mb-1"><strong>Monday - Sunday</strong></p>
+                            <p class="mb-1"><strong>12:00 PM - 01:00 AM</strong></p>
+                        </div>
 
-            </div>
-        </section>
+                        <!-- Location Map (col-4) -->
+                        <div class="col-md-4 col-lg-4 mt-3">
+                            <h6 class="text-uppercase mb-3 fw-bold">Location</h6>
+                            <div class="footer-map"
+                                style="width: 100%; height: 180px; border-radius: 8px; overflow: hidden;">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3393.8912462511184!2d72.97650837399229!3d31.71886563731121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMzHCsDQzJzA3LjkiTiA3MsKwNTgnNDQuNyJF!5e0!3m2!1sen!2s!4v1765282477986!5m2!1sen!2s"
+                                    width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
 
-        <hr class="my-3">
-
-        <section class="p-3 pt-0">
-            <div class="row d-flex align-items-center">
-
-                <div class="col-md-12 text-center">
-                    <div class="p-3">
-                        © 2025 Copyright:
-                        <a class="text-dark fw-bold" href="#">cafechinos.cafe</a>
-                        <br>
-                        <span class="text-muted">
-                            Developed by <strong>DevtaSoft Company</strong>
-                        </span>
                     </div>
-                </div>
+                </section>
+
+                <hr class="my-3">
+
+                <!-- Footer Bottom -->
+                <section class="p-3 pt-0">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <div class="p-3">
+                                © 2025 Copyright:
+                                <a class="text-dark fw-bold" href="#">cafechinos.cafe</a>
+                                <br>
+                                <span class="text-muted">
+                                    Developed by <strong>DevtaSoft Company</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
             </div>
-        </section>
+        </footer>
 
-    </div>
-</footer>
+        <style>
+            .footer-map iframe {
+                border: 0;
+            }
+
+            @media (max-width: 768px) {
+                .footer-map {
+                    height: 150px !important;
+                }
+            }
+        </style>
+
 
     </div>
     <div id="responsive-overlay"></div>
