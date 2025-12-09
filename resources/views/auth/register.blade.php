@@ -81,16 +81,6 @@
             background: #9a3b0d;
         }
 
-        /* RIGHT: Image */
-        .auth-visual {
-            flex: 1;
-            min-height: 470px;
-            background-image: url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1400&q=80');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
         .visual-overlay {
             position: absolute;
             inset: 0;

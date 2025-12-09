@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Menu;
-use App\Models\Wishlist;
+use App\Models\WishList;
 use Stevebauman\Location\Facades\Location;
 
 class ClientController extends Controller

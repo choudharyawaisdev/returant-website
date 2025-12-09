@@ -15,6 +15,11 @@ class Menu extends Model
         'image',
         'category_id',
     ];
+    
+    protected $casts = [
+    'price' => 'float',
+    ];
+
 
     public function category()
     {

@@ -131,7 +131,7 @@ class MenuController extends Controller
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
             'discount'    => 'nullable|numeric|min:0',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'single_price'=> 'nullable|numeric|min:0',
             'type'        => 'nullable|array',
             'type.*'      => 'nullable|string|max:100',

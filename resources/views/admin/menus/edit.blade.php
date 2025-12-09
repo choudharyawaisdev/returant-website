@@ -59,8 +59,10 @@
                                 <div class="col-md-6 mb-3">
                                     <label for="price" class="form-label">Single Price (No Type/Size)</label>
                                     <input type="number" step="0.01"
-                                        class="form-control @error('price') is-invalid @enderror" id="single_price"
-                                        name="price" value="{{ old('price', $menu->price) }}"
+                                        class="form-control @error('single_price') is-invalid @enderror"
+                                        id="single_price"
+                                        name="single_price"
+                                        value="{{ old('single_price', is_array($menu->price) ? '' : $menu->price) }}"
                                         min="0" placeholder="Optional if no sizes">
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -99,9 +101,16 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="discount" class="form-label">Discount (Optional)</label>
-                                    <input type="number" step="0.01"
-                                        class="form-control @error('discount') is-invalid @enderror" id="discount"
-                                        name="discount" value="{{ old('discount', $menu->discount ?? 0) }}" min="0">
+                                   <input 
+                                    type="number" 
+                                    step="0.01"
+                                    class="form-control @error('single_price') is-invalid @enderror" 
+                                    id="single_price"
+                                    name="single_price"
+                                    value="{{ old('single_price', $menu->price) }}"
+                                    min="0"
+                                    placeholder="Optional if no sizes">
+
                                     @error('discount')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -149,17 +158,17 @@
     </div>
 
     <script>
-        const categoryTypes = {
-            'Pizza': ['Personal', 'Small Pizza', 'Medium Pizza'],
+       const categoryTypes = {
+            'Pizza': ['Personal', 'Small Pizza', 'Medium Pizza', 'Large Pizza', 'XL Pizza', 'XXL Pizza', 'Family Pizza'],
             'Burger': ['Single', 'Double', 'Triple', 'Zinger'],
             'Drinks': ['Small', 'Regular', 'Large', 'XL'],
-            'Fries': ['Fries Small', 'Fries Large'],
-            'Platter': ['Single', 'Double', 'Half', 'Large'],
-            'Wings': ['4 Pcs Wings', '6 Pcs Wings'],
-            'Pasta': ['Pasta Small', 'Pasta Large'],
-            'Sandwich': ['Sandwich Small', 'Sandwich Large'],
-            'Rolls': ['Chicken Roll', 'Beef Roll'],
-            'Nuggets & Shots': ['4 Pcs', '6 Pcs', '12 Pcs']
+            'Fries': ['Fries Small', 'Fries Large', 'Mayo Fries', 'Masala Fries', 'Loaded Fries', 'Pizza Fries Small', 'Pizza Fries Large', 'Cheese Fries'],
+            'Platter': ['Single', 'Double', 'Half', 'Large', 'Special Platter'],
+            'Wings': ['4 Pcs Wings', '6 Pcs Wings', '8 Pcs Wings', '10 Pcs Wings', '12 Pcs Wings', '15 Pcs Wings', 'Hot Wings', 'Oven Baked Wings', 'Bar-B-Q Wings'],
+            'Pasta': ['Pasta Small', 'Pasta Large', 'Chef Special Pasta', 'Creamy Chicken Pasta', 'Lagana Pasta'],
+            'Sandwich': ['Sandwich Small', 'Sandwich Large', 'Special Sandwich', 'Mexican Sandwich', 'Jalapeno Sandwich', 'Crispy Sandwich'],
+            'Rolls': ['Chicken Roll', 'Beef Roll', '4 Chicken Spin Rolls', '4 Behari Rolls', 'Tikka Paratha Rolls', 'Chapli Kabab Paratha', 'Crunchy Paratha Roll'],
+            'Nuggets & Shots': ['4 Pcs', '5 Pcs', '6 Pcs', '7 Pcs', '12 Pcs', '15 Pcs', 'Hot Shot'],
         };
 
         const categorySelect = document.getElementById('category_id');

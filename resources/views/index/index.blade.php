@@ -106,7 +106,26 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
             background: white;
         }
+
+        <style>.search-input {
+            border: none !important;
+            border-bottom: 2px solid #000 !important;
+            /* Only bottom border */
+            border-radius: 0 !important;
+            /* No rounding */
+            box-shadow: none !important;
+            /* No shadow */
+            height: 48px;
+        }
+
+        .search-input:focus {
+            border-bottom: 2px solid #A9262B !important;
+            /* Your theme color on focus */
+            outline: none !important;
+            box-shadow: none !important;
+        }
     </style>
+
     @php
         $categoryNames = [
             1 => 'Platter',
@@ -118,6 +137,8 @@
             7 => 'Nuggets & Shots',
             8 => 'Fries',
             9 => 'Drinks',
+            10 => 'Pizza',
+            11 => 'Deals',
         ];
 
         $wishlistMenus = [];
@@ -127,12 +148,13 @@
     @endphp
 
     {{-- RESPONSIVE SINGLE IMAGE SLIDER --}}
-    <div class="container my-4">
+    <div class="container-fluid my-4">
         <div id="imageSlider" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="{{ asset('assets/images/hero banner 2.jpg') }}" class="d-block w-100" alt="Special Offer Banner"
-                        style="object-fit: fill; height: 60vh; border-radius: 15px;">
+                    <img class="d-block w-100 mobile" src="{{ asset('assets/images/buy 1 get 1 free.jpg') }}"
+                        alt="Buy 1 Get 1 Free" style="object-fit: fill; border-radius: 15px;">
+
                 </div>
             </div>
         </div>
@@ -140,7 +162,7 @@
 
 
     {{-- MAIN NAVIGATION BAR (Sticky Categories with Scroll Arrows) --}}
-    <nav id="categoryNav" class="navbar navbar-expand-lg bg-white shadow-sm main-navbar py-4">
+    <nav id="categoryNav" class="navbar navbar-expand-lg bg-white shadow-sm main-navbar py-5">
 
         <div class="container position-relative">
             {{-- Scrollable Menu Wrapper --}}
@@ -162,25 +184,7 @@
             </div>
         </div>
     </nav>
-    <style>
-        .search-input {
-            border: none !important;
-            border-bottom: 2px solid #000 !important;
-            /* Only bottom border */
-            border-radius: 0 !important;
-            /* No rounding */
-            box-shadow: none !important;
-            /* No shadow */
-            height: 48px;
-        }
 
-        .search-input:focus {
-            border-bottom: 2px solid #A9262B !important;
-            /* Your theme color on focus */
-            outline: none !important;
-            box-shadow: none !important;
-        }
-    </style>
     {{-- NEW: FULL-WIDTH SEARCH BAR --}}
     <div class="container-fluid bg-light py-3 border-bottom">
         <div class="container">
@@ -247,7 +251,7 @@
                                             Add To Cart
                                         </button>
 
-                                        <div class="position-absolute top-0 end-0 m-2">
+                                        {{-- <div class="position-absolute top-0 end-0 m-2">
                                             <button class="btn btn-light rounded-circle shadow wishlist-btn"
                                                 data-id="{{ $menu->id }}">
                                                 <i class="wishlist-icon 
@@ -255,7 +259,7 @@
                                                     data-id="{{ $menu->id }}"
                                                     style="cursor:pointer; font-size:22px;"></i>
                                             </button>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>

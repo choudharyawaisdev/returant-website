@@ -13,6 +13,9 @@
                     <li class="breadcrumb-item active">Products Index</li>
                 </ol>
             </nav>
+            <a href="{{ route('admin.menus.create') }}" class="btn btn-primary btn-sm mb-3">
+                <i class="fa fa-plus"></i> Add New Product
+            </a>
         </div>
 
         <div class="col-xl-12">
