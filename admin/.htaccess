@@ -1,16 +1,14 @@
 # ============================================================
 #  Cafe Chinos — Admin Panel .htaccess
-#  ✅ Extra security for /admin directory
+#  ✅ Security for /admin directory
 #  ✅ Block non-PHP direct file access
-#  ✅ Remove .php extension inside admin too
-#  ✅ Prevent hotlinking & info leakage
+#  ✅ Remove .php extension inside admin dynamically
 # ============================================================
 
 Options -Indexes
 Options -MultiViews
 
 RewriteEngine On
-RewriteBase /Resturant-Web/admin/
 
 # ── Block all non-essential file types ──────────────────────
 <FilesMatch "\.(sql|json|log|md|env|htpasswd|bak|sh|ini|txt)$">
@@ -38,11 +36,6 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+)$ $1.php [L,QSA]
-
-# ── Redirect /admin/xxx.php → /admin/xxx (GET ONLY, NEVER POST) ─
-RewriteCond %{REQUEST_METHOD} !POST
-RewriteCond %{THE_REQUEST} \s/+Resturant-Web/admin/(.+?)\.php[\s?] [NC]
-RewriteRule ^ /Resturant-Web/admin/%1 [R=301,L,NE]
 
 # ── PHP Security Settings ─────────────────────────────────────
 <IfModule mod_php.c>

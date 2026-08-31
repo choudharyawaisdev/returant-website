@@ -8,7 +8,7 @@ require_once dirname(__DIR__) . '/includes/functions.php';
 
 // Redirect if already logged in as admin
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header('Location: /Resturant-Web/admin/dashboard');
+    header('Location: dashboard');
     exit();
 }
 
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$is_locked_out) {
             $pdo->prepare("UPDATE admin_users SET last_login = NOW() WHERE id = ?")
                 ->execute([$admin['id']]);
 
-            header('Location: /Resturant-Web/admin/dashboard');
+            header('Location: dashboard');
             exit();
         } else {
             // ❌ Failed attempt
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$is_locked_out) {
                 <p class="text-muted small">Enter your credentials to manage restaurant operations.</p>
             </div>
 
-            <form action="/Resturant-Web/admin/login" method="POST" id="loginForm" autocomplete="off">
+            <form action="login" method="POST" id="loginForm" autocomplete="off">
                 <div class="mb-3">
                     <label for="username" class="form-label small fw-bold text-muted">USERNAME</label>
                     <div class="input-group">

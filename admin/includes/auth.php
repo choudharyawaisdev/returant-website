@@ -26,7 +26,7 @@ if (isset($_SESSION['admin_last_activity'])) {
         // Session expired — destroy and redirect
         session_unset();
         session_destroy();
-        header("Location: /Resturant-Web/admin/login?reason=timeout");
+        header("Location: login?reason=timeout");
         exit();
     }
 }
@@ -44,7 +44,7 @@ if (isset($_SESSION['admin_fingerprint'])) {
         // Fingerprint mismatch — possible hijack attempt
         session_unset();
         session_destroy();
-        header("Location: /Resturant-Web/admin/login?reason=security");
+        header("Location: login?reason=security");
         exit();
     }
 } else {
@@ -53,7 +53,7 @@ if (isset($_SESSION['admin_fingerprint'])) {
 
 // ── Check if admin is logged in ──────────────────────────────
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: /Resturant-Web/admin/login");
+    header("Location: login");
     exit();
 }
 
